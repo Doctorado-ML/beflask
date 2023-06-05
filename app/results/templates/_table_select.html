@@ -1,0 +1,50 @@
+{%- macro get_button_tag(icon_name, method, visible=True, name="") -%}
+<button class="btn btn-primary btn-small" onclick="{{ method }}" {{ "" if visible else "hidden='true'" }} {{ "" if name=="" else "name='" + name +"'"}}><i class="mdi mdi-{{ icon_name }}"></i>
+</button>
+{%- endmacro -%}
+<table id="file-table"
+       class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Model</th>
+            <th>Metric</th>
+            <th>Platform</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Stratified</th>
+            <th>Title</th>
+            <th>Score</th>
+            <th>
+                <button class="btn btn-primary btn-small btn-danger"
+                        onclick="setCheckBoxes(false)">
+                    <i class="mdi mdi-checkbox-multiple-blank"></i>
+                </button>
+                <button class="btn btn-primary btn-small btn-success"
+                        onclick="setCheckBoxes(true)">
+                    <i class="mdi mdi-checkbox-multiple-marked"></i>
+                </button>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file, data in files.items() %}
+                {% set parts = file.split('_') %}
+                {% set stratified = parts[6].split('.')[0] %}
+                <tr id="{{ file }}">
+                    <td>{{ parts[2] }}</td>
+                    <td>{{ parts[1] }}</td>
+                    <td>{{ parts[3] }}</td>
+                    <td>{{ parts[4] }}</td>
+                    <td>{{ parts[5] }}</td>
+                    <td>{{ 'True' if stratified =='1' else 'False' }}</td>
+                    <td>{{ "%s" % data["title"] }}</td>
+                    <td class="text-end">{{ "%.6f" % data["score"] }}</td>
+                    <td>
+                        {{ get_button_tag("table-eye", "showFile('" ~ file ~ "') ") | safe }}
+                        {% set file_best = "best_results_" ~ parts[1] ~ "_" ~ parts[2] ~ ".json" %}
+                        {{ get_button_tag("star-circle-outline", "redirectDouble('best_results', '" ~ file_best ~ "') ", visible=False, name="best_buttons") | safe }}
+                        <input type="checkbox" name="selected_files" value="{{ file }}" />
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>

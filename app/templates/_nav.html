@@ -1,0 +1,30 @@
+{% from 'bootstrap5/nav.html' import render_nav_item %}
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-4 justify-content-end">
+    <div class="container">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left side of navbar -->
+            <ul class="navbar-nav me-auto">
+                {{ render_nav_item('main.index', 'Home') }}
+            </ul>
+            <ul class="navbar-nav justify-content-end">
+                {{ render_nav_item('results.select', 'Results') }}
+                {{ render_nav_item('results.datasets', 'Datasets') }}
+                {{ render_nav_item('main.config', 'Config') }}
+                {% if current_user.is_authenticated %}
+                    {{ render_nav_item('main.logout', current_user.username + '(Logout) ') }}
+                {% else %}
+                    {{ render_nav_item('main.login', 'Login') }}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

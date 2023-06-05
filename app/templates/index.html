@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if benchmarks %}
+        <h5>Benchmarks</h5>
+        <ul>
+            {% for benchmark in benchmarks %}
+                <li>
+                    <a href="">{{ benchmark.name }} {{ benchmark.folder }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

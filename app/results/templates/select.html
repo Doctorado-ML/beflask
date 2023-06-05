@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include "_table_select.html" %}
+{% endblock %}
+{% block jscript %}
+    {{ super() }}
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="{{ url_for('static', filename="js/select.js") }}"></script>
+{% endblock %}

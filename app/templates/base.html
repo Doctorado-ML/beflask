@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+            <meta charset="utf-8">
+            <meta name="viewport"
+                  content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            {% block styles %}
+                {{ bootstrap.load_css() }}
+                <link rel="stylesheet" href="/css/elina.css">
+                <link rel="stylesheet"
+                      href="{{ url_for('static', filename='css/main.css') }}">
+            {% endblock %}
+            <title>Benchmark</title>
+        {% endblock %}
+    </head>
+    <body>
+        {% include "_nav.html" %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}<div class="alert alert-info" role="alert">{{ message }}</div>{% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+    {% block jscript %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        {{ bootstrap.load_js() }}
+    {% endblock %}
+</html>

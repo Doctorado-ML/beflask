@@ -1,0 +1,52 @@
+.alternate-font {
+  font-family: Arial;
+}
+
+tbody {
+  font-family: Courier;
+}
+
+.tag {
+  cursor: pointer;
+}
+
+.ajaxLoading {
+  cursor: progress !important;
+}
+
+#file-table tbody tr.selected td {
+  background-color: #0dcaf0;
+  color: white;
+}
+
+#report-table tbody tr.selected td {
+  background-color: #0dcaf0;
+  color: white;
+}
+
+.btn-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+body {
+  padding-bottom: 20px;
+  background-color: #ffb878;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+pre {
+    background: #ddd;
+    padding: 10px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+footer {
+    margin: 20px;
+}
