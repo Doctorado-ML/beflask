@@ -40,33 +40,38 @@ $(document).ready(function () {
     $(document).ajaxStop(function () {
       $("body").removeClass("ajaxLoading");
     });
-    $('#compare').change(function() {
-      enable_disable_best_buttons();
+  $('#compare').change(function () {
+      $.ajax({
+        type:'POST',
+        url:'/results/set_compare',
+        data: JSON.stringify({"compare": $("#compare").is(":checked")}),
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(data){
+          if (data.success) {
+            enable_disable_best_buttons();
+          } else {
+            alert(data.file);
+          }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          alert(XMLHttpRequest.responseText);
+        }
+      });
     });
     enable_disable_best_buttons();
   });
   function enable_disable_best_buttons(){
     if ($('#compare').is(':checked')) {
       $("[name='best_buttons']").addClass("tag is-link is-normal");
-        $("[name='best_buttons']").removeAttr("hidden");
+      $("[name='best_buttons']").removeAttr("hidden");
       } else {
         $("[name='best_buttons']").removeClass("tag is-link is-normal");
         $("[name='best_buttons']").attr("hidden", true);
       }
   }
   function showFile(selectedFile) {
-    var form = $(
-      '<form action="/show" method="post">' +
-        '<input type="hidden" name="selected-file" value="' +
-        selectedFile +
-        '" />' +
-        '<input type="hidden" name="compare" value=' +
-        $("#compare").is(":checked") +
-        " />" +
-        "</form>"
-    );
-    $("body").append(form);
-    form.submit();
+    location.href = "/results/show/" + selectedFile;
   }
   function excel() {
     var checkbox = document.getElementsByName("selected_files");

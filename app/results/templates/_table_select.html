@@ -41,11 +41,11 @@
                     <td>
                         {% set file_best = "best_results_" ~ parts[1] ~ "_" ~ parts[2] ~ ".json" %}
                         <button class="btn btn-primary btn-small"
-                                onclick="{{ url_for("results.report", file_name=file) }}">
+                                onclick='location.href="{{ url_for("results.report", file_name=file) }}"'>
                             <i class="mdi mdi-table-eye"></i>
                         </button>
                         <button class="btn btn-primary btn-small"
-                                onclick="{{ url_for("results.best", file_name=file_best) }}"
+                                onclick='location.href="{{ url_for("results.best", file_name=file_best) }}"'
                                 hidden="true"
                                 name="best_buttons">
                             <i class="mdi mdi-star-circle-outline"></i>

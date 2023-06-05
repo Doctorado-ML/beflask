@@ -7,12 +7,32 @@ from flask_login import current_user
 from flask import Blueprint, current_app, send_file
 from flask import render_template, current_app, request, redirect, url_for
 from flask_login import login_required
+from ..config import Config
 
 # import shutil
 # import xlsxwriter
 # from benchmark.ResultsFiles import Excel, ReportDatasets
 
 results = Blueprint("results", __name__, template_folder="templates")
+
+
+class AjaxResponse:
+    def __init__(self, success, file_name, code=200):
+        self.success = success
+        self.file_name = file_name
+        self.code = code
+
+    def to_string(self):
+        return (
+            json.dumps(
+                {
+                    "success": self.success,
+                    "file": self.file_name,
+                }
+            ),
+            self.code,
+            {"ContentType": "application/json"},
+        )
 
 
 @results.route("/select")
@@ -63,6 +83,13 @@ def best(file_name):
     return render_template("datasets.html", datasets=datos)
 
 
+@results.route("/set_compare", methods=["POST"])
+def set_compare():
+    compare = request.json["compare"]
+    current_app.config.update(COMPARE=compare)
+    return AjaxResponse(True, "Ok").to_string()
+
+
 @results.route("/report/<file_name>")
 @login_required
 def report(file_name):
@@ -70,17 +97,14 @@ def report(file_name):
     with open(os.path.join(Folders.results, file_name)) as f:
         data = json.load(f)
     try:
-        compare = current_app.config["COMPARE"]
-        summary = process_data(file_name, compare, data)
+        summary = process_data(file_name, current_app.config["COMPARE"], data)
     except Exception as e:
-        return render_template("error.html", message=str(e), compare=compare)
+        return render_template("error.html", message=str(e))
     return render_template(
         "report.html",
         data=data,
         file=file_name,
         summary=summary,
-        framework=current_app.config["FRAMEWORK"],
-        back=back,
     )
 
 

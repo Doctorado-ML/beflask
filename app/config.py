@@ -17,10 +17,3 @@ class Config(object):
         "DATABASE_URL"
     ) or "sqlite:///" + os.path.join(basedir, "app.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    @staticmethod
-    def save():
-        with open(dotenv_file, "w") as f:
-            f.write("FRAMEWORK=" + Config.FRAMEWORK + "\n")
-            f.write("OUTPUT=" + Config.OUTPUT + "\n")
-            f.write("COMPARE=" + str(Config.COMPARE) + "\n")
