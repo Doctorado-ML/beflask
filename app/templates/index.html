@@ -1,16 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% if benchmarks %}
-        <h5>Benchmarks</h5>
-        <ul>
-            {% for benchmark in benchmarks %}
-                <li>
-                    <a href="{{ url_for('main.set_benchmark', benchmark_id=benchmark.id) }}">{{ benchmark.name }}
-                        {% if benchmark == current_user.benchmark %}*{% endif %}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+        {% include "_benchmarks.html" %}
     {% else %}
         <img src="{{ url_for('static', filename='img/robert-lukeman-_RBcxo9AU-U-unsplash.jpg') }}"
              class="img-fluid"

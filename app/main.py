@@ -32,6 +32,9 @@ def index():
 @main.route("/set_benchmark/<benchmark_id>")
 @login_required
 def set_benchmark(benchmark_id):
+    if int(benchmark_id) == current_user.benchmark_id:
+        flash("Benchmark already selected.")
+        return redirect(url_for(INDEX))
     if current_user.admin:
         benchmark = Benchmark.query.filter_by(id=benchmark_id).first()
         if benchmark is None:
