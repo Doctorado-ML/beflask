@@ -1,0 +1,25 @@
+<table id="file-table"
+       class="table table-striped table-hover table-bordered bg-light">
+    <thead>
+        <tr class="bg-primary text-white">
+            <th class="text-center">Dataset</th>
+            <th class="text-center">Samples</th>
+            <th class="text-center">Features</th>
+            <th class="text-center">Cont. Feat.</th>
+            <th class="text-center">Classes</th>
+            <th class="text-center">Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dataset in datasets %}
+            <tr>
+                <td>{{ dataset.dataset }}</td>
+                <td class="text-end">{{ "{:,}".format(dataset.samples) }}</td>
+                <td class="text-end">{{ "{:,}".format(dataset.features) }}</td>
+                <td class="text-end">{{ dataset.cont_features }}</td>
+                <td class="text-end">{{ dataset.classes }}</td>
+                <td>{{ dataset.balance }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

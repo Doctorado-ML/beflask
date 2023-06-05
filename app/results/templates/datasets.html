@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include "_table_datasets.html" %}
+{% endblock %}
+{% block jscript %}
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            $(document).ajaxStart(function(){ 
+                $("body").addClass('ajaxLoading');
+            });
+            $(document).ajaxStop(function(){ 
+                $("body").removeClass('ajaxLoading');
+            });
+            });
+            // Check if row is selected
+            $('#file-table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            } else {
+                $('#file-table tbody tr.selected').removeClass("selected")
+                $(this).addClass('selected');
+            }
+        });
+    </script>
+{% endblock %}
