@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    <table id="file-table"
+           class="table table-striped table-hover table-bordered bg-light">
+        <thead>
+            <tr class="bg-primary text-white">
+                <th class="text-center">Dataset</th>
+                <th class="text-center">Score</th>
+                <th class="text-center">Hyperparameters</th>
+                <th class="text-center">File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dataset, info in data.items() %}
+                <tr>
+                    <td>{{ dataset }}</td>
+                    <td class="text-end">{{ '%9.7f' % info[0] }}</td>
+                    <td class="text-center">{{ info[1] }}</td>
+                    <td>
+                        {% set url = url_for(request.endpoint, **request.view_args)|urlencode %}
+                        <a href="{{ url_for('results.report', file_name = info[2]) }}?url={{ url }}">{{ info[2] }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block jscript %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename="js/report.js") }}"></script>
+{% endblock %}

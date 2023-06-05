@@ -7,7 +7,6 @@ from flask_login import current_user
 from flask import Blueprint, current_app, send_file
 from flask import render_template, current_app, request, redirect, url_for
 from flask_login import login_required
-from ..config import Config
 
 # import shutil
 # import xlsxwriter
@@ -76,11 +75,12 @@ def datasets():
 @login_required
 def best(file_name):
     os.chdir(current_user.benchmark.folder)
-    dt = Datasets()
-    datos = []
-    for dataset in dt:
-        datos.append(dt.get_attributes(dataset))
-    return render_template("datasets.html", datasets=datos)
+    try:
+        with open(os.path.join(Folders.results, file_name)) as f:
+            data = json.load(f)
+    except Exception as e:
+        return render_template("error.html", message=str(e))
+    return render_template("best.html", data=data)
 
 
 @results.route("/set_compare", methods=["POST"])
