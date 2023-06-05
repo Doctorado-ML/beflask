@@ -5,9 +5,15 @@
         <ul>
             {% for benchmark in benchmarks %}
                 <li>
-                    <a href="">{{ benchmark.name }} {{ benchmark.folder }}</a>
+                    <a href="{{ url_for('main.set_benchmark', benchmark_id=benchmark.id) }}">{{ benchmark.name }}
+                        {% if benchmark == current_user.benchmark %}*{% endif %}
+                    </a>
                 </li>
             {% endfor %}
         </ul>
+    {% else %}
+        <img src="{{ url_for('static', filename='img/robert-lukeman-_RBcxo9AU-U-unsplash.jpg') }}"
+             class="img-fluid"
+             alt="image robert lukeman">
     {% endif %}
 {% endblock %}

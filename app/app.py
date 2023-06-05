@@ -5,7 +5,7 @@ from flask_login import LoginManager
 from .config import Config
 from .models import User, db
 
-from .results.main import results
+from .results.main_select import results
 from .main import main
 
 bootstrap = Bootstrap5()

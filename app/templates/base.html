@@ -7,7 +7,6 @@
                   content="width=device-width, initial-scale=1, shrink-to-fit=no">
             {% block styles %}
                 {{ bootstrap.load_css() }}
-                <link rel="stylesheet" href="/css/elina.css">
                 <link rel="stylesheet"
                       href="{{ url_for('static', filename='css/main.css') }}">
             {% endblock %}
@@ -16,9 +15,14 @@
     </head>
     <body>
         {% include "_nav.html" %}
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for message in messages %}<div class="alert alert-info" role="alert">{{ message }}</div>{% endfor %}
+                {% for category, message in messages %}
+                    {% if category == 'message' %}
+                        {% set category = "info" %}
+                    {% endif %}
+                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
             {% endif %}
         {% endwith %}
         <div class="container">

@@ -9,9 +9,11 @@ from flask import (
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from .forms import LoginForm
-from .models import User, Benchmark
+from .models import User, Benchmark, db
 
 main = Blueprint("main", __name__)
+
+INDEX = "main.index"
 
 
 @main.route("/")
@@ -27,6 +29,21 @@ def index():
     return render_template("index.html", benchmarks=benchmarks)
 
 
+@main.route("/set_benchmark/<benchmark_id>")
+@login_required
+def set_benchmark(benchmark_id):
+    if current_user.admin:
+        benchmark = Benchmark.query.filter_by(id=benchmark_id).first()
+        if benchmark is None:
+            flash("Benchmark not found.")
+            return redirect(url_for(INDEX))
+        current_user.benchmark = benchmark
+        db.session.commit()
+    else:
+        flash("You are not an admin.", "danger")
+    return redirect(url_for(INDEX))
+
+
 @main.route("/config")
 @login_required
 def config():
@@ -36,7 +53,7 @@ def config():
 @main.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("main.index"))
+        return redirect(url_for(INDEX))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -47,7 +64,7 @@ def login():
         flash("Logged in successfully.")
         next_page = request.args.get("next")
         if not next_page or url_parse(next_page).netloc != "":
-            next_page = url_for("main.index")
+            next_page = url_for(INDEX)
         return redirect(next_page)
     return render_template("login.html", title="Sign In", form=form)
 
@@ -55,4 +72,4 @@ def login():
 @main.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("main.index"))
+    return redirect(url_for(INDEX))
