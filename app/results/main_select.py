@@ -79,7 +79,10 @@ def best(file_name):
         with open(os.path.join(Folders.results, file_name)) as f:
             data = json.load(f)
     except Exception as e:
-        return render_template("error.html", message=str(e))
+        return render_template(
+            "error.html",
+            message=f"This best results file ({file_name}) has not been created yet!",
+        )
     return render_template("best.html", data=data)
 
 
