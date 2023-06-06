@@ -14,4 +14,4 @@ $(document).ready(function () {
     $(document).ajaxStop(function(){ 
         $("body").removeClass('ajaxLoading');
     });
-  });
+});

@@ -51,20 +51,55 @@
                     </thead>
                 </table>
                 <div>{{ excel_button([ file ]) }}</div>
-                <table id="report-table"
-                       class="table table-striped table-hover table-bordered bg-light">
+                <table class="table table-striped table-hover table-bordered bg-light"
+                       id="table-report"
+                       data-toggle="table"
+                       data-sticky-header="true"
+                       data-sticky-header-offset-y="50"
+                       data-sortable="true">
                     <thead>
                         <tr class="bg-primary text-white">
-                            <th class="text-center">Dataset</th>
-                            <th class="text-center">Samples</th>
-                            <th class="text-center">Features</th>
-                            <th class="text-center">Classes</th>
-                            <th class="text-center">Nodes</th>
-                            <th class="text-center" colspan="2">{{ data.score_name|capitalize }}</th>
-                            <th class="text-center">Time</th>
-                            <th class="text-center">hyperparameters</th>
+                            <th class="text-center" data-field="dataset" data-sortable="true">Dataset</th>
+                            <th class="text-center"
+                                data-field="samples"
+                                data-sortable="true"
+                                data-sorter="remove_dot">Samples</th>
+                            <th class="text-center"
+                                data-field="features"
+                                data-sortable="true"
+                                data-sorter="remove_dot">Features</th>
+                            <th class="text-center"
+                                data-field="classes"
+                                data-sortable="true"
+                                sdata-orter="remove_dot">Classes</th>
+                            <th class="text-center"
+                                data-field="nodes"
+                                data-sortable="true"
+                                data-sorter="remove_dot">Nodes</th>
+                            <th class="text-center"
+                                data-field="score"
+                                data-sortable="true"
+                                data-sorter="remove_plus">{{ data.score_name|capitalize }}</th>
+                            <th class="text-center"></th>
+                            <th class="text-center"
+                                data-field="time"
+                                data-sortable="true"
+                                data-sorter="remove_plus">Time</th>
+                            <th class="text-center" data-field="hyperparameters" data-sortable="true">hyperparameters</th>
                         </tr>
                     </thead>
+                    <script>
+                        function remove_plus(a, b) {
+                          var aa = a.split('±')[0]
+                          var bb = b.split('±')[0]
+                          return aa - bb
+                        }
+                        function remove_dot(a, b) {
+                            var aa = a.replace(',', '').replace('.', '')
+                            var bb = b.replace(',', '').replace('.', '')
+                            return aa - bb
+                        }
+                    </script>
                     <tbody>
                         {% for item in data.results %}
                             <tr>
