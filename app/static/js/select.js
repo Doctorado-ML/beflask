@@ -32,7 +32,7 @@ $(document).ready(function () {
     });
     // Show file with doubleclick
     $("#file-table tbody").on("dblclick", "tr", function () {
-      showFile($(this).attr("id"));
+      location.href="/results/report/"+ $(this).attr("id");
     });
     $(document).ajaxStart(function () {
       $("body").addClass("ajaxLoading");

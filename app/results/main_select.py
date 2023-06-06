@@ -81,7 +81,9 @@ def best(file_name):
     except Exception as e:
         return render_template(
             "error.html",
-            message=f"This best results file ({file_name}) has not been created yet!",
+            message=f"This best results file ({file_name}) has not been "
+            "created yet! or...",
+            error=str(e),
         )
     return render_template("best.html", data=data)
 
