@@ -1,4 +1,15 @@
+{% from "macros.html" import excel_button %}
 <div id="app">
+    {% if back %}
+        <button type="button"
+                class="btn btn-primary position-relative"
+                onclick="location.href='{{ back }}'">
+            Back to Best Results Report
+            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                <span class="visually-hidden">Back to Best Results Report</span>
+            </span>
+        </button>
+    {% endif %}
     <section class="section">
         <div class="container-fluid">
             <div>
@@ -39,11 +50,7 @@
                         </tr>
                     </thead>
                 </table>
-                <div>
-                    <button class="{{ button }}" onclick="excelFile()">
-                        <i class="mdi mdi-file-excel"></i> Excel
-                    </button>
-                </div>
+                <div>{{ excel_button([ file ]) }}</div>
                 <table id="report-table"
                        class="table table-striped table-hover table-bordered bg-light">
                     <thead>
@@ -53,7 +60,7 @@
                             <th class="text-center">Features</th>
                             <th class="text-center">Classes</th>
                             <th class="text-center">Nodes</th>
-                            <th class="text-center">{{ data.score_name|capitalize }}</th>
+                            <th class="text-center" colspan="2">{{ data.score_name|capitalize }}</th>
                             <th class="text-center">Time</th>
                             <th class="text-center">hyperparameters</th>
                         </tr>
@@ -62,13 +69,14 @@
                         {% for item in data.results %}
                             <tr>
                                 <td>{{ item.dataset }}</td>
-                                <td class="{{ right }}">{{ '{:,}'.format(item.samples) }}</td>
-                                <td class="{{ right }}">{{"%d" % item.features}}</td>
-                                <td class="{{ right }}">{{"%d" % item.classes}}</td>
-                                <td class="{{ right }}">{{ '{:,.2f}'.format(item.nodes) }}</td>
-                                <td class="{{ right }}">{{"%.6f±%.4f" % (item.score, item.score_std)}} {{ item.symbol|safe }}</td>
-                                <td class="{{ right }}">{{"%.6f±%.4f" % (item.time, item.time_std)}}</td>
-                                <td class="{{ center }}">{{ item.hyperparameters }}</td>
+                                <td class="text-end">{{ '{:,}'.format(item.samples) }}</td>
+                                <td class="text-end">{{"%d" % item.features}}</td>
+                                <td class="text-end">{{"%d" % item.classes}}</td>
+                                <td class="text-end">{{ '{:,.2f}'.format(item.nodes) }}</td>
+                                <td class="text-end">{{"%.6f±%.4f" % (item.score, item.score_std)}}</td>
+                                <td class="text-center">{{ item.symbol|safe }}</td>
+                                <td class="text-end">{{"%.6f±%.4f" % (item.time, item.time_std)}}</td>
+                                <td class="text-center">{{ item.hyperparameters }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -86,11 +94,9 @@
                             <tbody>
                                 {% for key, value in summary.items() %}
                                     <tr>
-                                        <td class="{{ center }}">{{ key }}</td>
+                                        <td class="text-center">{{ key }}</td>
                                         <td>{{ value[0] }}</td>
-                                        <td class={{ right }}>
-                                            {{ '{:,}'.format(value[1]) }}
-                                        </td>
+                                        <td class=text-end>{{ '{:,}'.format(value[1]) }}</td>
                                     </tr>
                                 </tbody>
                             {% endfor %}

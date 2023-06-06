@@ -1,0 +1,12 @@
+{% macro excel_button(files, function="excelSend") %}
+    {% if files %}
+        {% set call %}
+            {{ function }}({{ files }})
+        {% endset %}
+    {% else %}
+        {% set call = function + "()" %}
+    {% endif %}
+    <button class="btn btn-primary btn-small" onclick="{{ call }}">
+        <i class="mdi mdi-file-excel"></i> Excel
+    </button>
+{% endmacro %}

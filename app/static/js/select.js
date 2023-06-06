@@ -73,30 +73,9 @@ $(document).ready(function () {
   function showFile(selectedFile) {
     location.href = "/results/show/" + selectedFile;
   }
-  function excel() {
-    var checkbox = document.getElementsByName("selected_files");
-    var selectedFiles = [];
-    for (var i = 0; i < checkbox.length; i++) {
-      if (checkbox[i].checked) {
-        selectedFiles.push(checkbox[i].value);
-      }
-    }
-    if (selectedFiles.length == 0) {
-      alert("Select at least one file");
-      return;
-    }
-    var compare = $("#compare").is(":checked");
-    excelFiles(selectedFiles, compare);
-  }
   function setCheckBoxes(value) {
     var checkbox = document.getElementsByName("selected_files");
     for (i = 0; i < checkbox.length; i++) {
       checkbox[i].checked = value;
     }
-  }
-  function redirectDouble(route, parameter) {
-    location.href = "/"+ route + "/" + parameter + "/" + $("#compare").is(":checked");
-  }
-  function redirectSimple(route) {
-    location.href = "/" + route + "/" + $("#compare").is(":checked");
   }

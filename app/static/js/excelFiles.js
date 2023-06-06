@@ -1,29 +1,37 @@
-function excelFiles(selectedFiles, compare) {
+function excel_select() {
+    var checkbox = document.getElementsByName("selected_files");
+    var selectedFiles = [];
+    for (var i = 0; i < checkbox.length; i++) {
+      if (checkbox[i].checked) {
+        selectedFiles.push(checkbox[i].value);
+      }
+    }
+    if (selectedFiles.length == 0) {
+      alert("Select at least one file");
+      return;
+    }
+    excelSend(selectedFiles);
+}
+function excelSend(selectedFiles) {
     var data = {
         "selectedFiles": selectedFiles,
-        "compare": compare
     };
     // send data to server with ajax post
     $.ajax({
         type:'POST',
-        url:'/excel',
+        url:'/results/excel',
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: 'json',
         success: function(data){
             if (data.success) {
-                if (data.output == "local") {
-                    alert("Se ha generado el archivo " + data.file);
-                } else {
-                    window.open('/download/' + data.file, "_blank");
-                }
+                window.open('/results/download/' + data.file, "_blank");
             } else {
                 alert(data.file);
             }
         },
-        error: function (xhr, ajaxOptions, thrownError) {
-            var mensaje = JSON.parse(xhr.responseText || '{\"mensaje\": \"Error indeterminado\"}');
-            alert(mensaje.mensaje);
-        }
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.responseText);
+          }
     });
 }

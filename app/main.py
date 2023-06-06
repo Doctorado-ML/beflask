@@ -1,3 +1,5 @@
+import os
+from benchmark.utils import Files
 from flask import (
     Blueprint,
     render_template,
@@ -24,6 +26,10 @@ def index():
             benchmarks = Benchmark.query.all()
         else:
             benchmarks = [current_user.benchmark]
+        for benchmark in benchmarks:
+            os.chdir(benchmark.folder)
+            benchmark.num_files = len(Files.get_all_results(hidden=False))
+        os.chdir(current_user.benchmark.folder)
     else:
         benchmarks = []
     return render_template("index.html", benchmarks=benchmarks)
