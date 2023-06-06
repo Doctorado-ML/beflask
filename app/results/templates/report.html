@@ -10,15 +10,6 @@
 {% endblock %}
 {% block content %}
     {% include "_table_report.html" %}
-    <table data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data">
-        <thead>
-            <tr>
-                <th data-field="id">ID</th>
-                <th data-field="name">Item Name</th>
-                <th data-field="price" data-sortable="true">Item Price</th>
-            </tr>
-        </thead>
-    </table>
 {% endblock %}
 {% block jscript %}
     {{ super() }}

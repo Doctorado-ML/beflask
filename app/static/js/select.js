@@ -1,33 +1,11 @@
 $(document).ready(function () {
-    var table = $("#file-table").DataTable({
-      paging: true,
-      searching: true,
-      ordering: true,
-      info: true,
-      "select.items": "row",
-      pageLength: 25,
-      columnDefs: [
-        {
-          targets: 8,
-          orderable: false,
-        },
-      ],
-      //"language": {
-      //    "lengthMenu": "_MENU_"
-      //}
-    });
-    $('#file-table').on( 'draw.dt', function () {
-      enable_disable_best_buttons();
-    } );
     // Check if row is selected
-    $("#file-table tbody").on("click", "tr", function () {
-      if ($(this).hasClass("selected")) {
-        $(this).removeClass("selected");
+    $('#file-table tbody').on('click', 'tr', function () {
+      if ($(this).hasClass('selected')) {
+          $(this).removeClass('selected');
       } else {
-        table
-          .$("tr.selected")
-          .removeClass("selected");
-        $(this).addClass("selected");
+          $('#file-table tbody tr.selected').removeClass("selected")
+          $(this).addClass('selected');
       }
     });
     // Show file with doubleclick
