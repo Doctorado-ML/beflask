@@ -1,8 +1,10 @@
 import os
+import dotenv
 from benchmark.utils import Files
 from flask import (
     Blueprint,
     render_template,
+    current_app,
     url_for,
     flash,
     redirect,
@@ -56,7 +58,10 @@ def set_benchmark(benchmark_id):
 @main.route("/config")
 @login_required
 def config():
-    return render_template("config.html")
+    os.chdir(current_user.benchmark.folder)
+    env = dotenv.dotenv_values(".env")
+    print(env)
+    return render_template("config.html", config_env=env)
 
 
 @main.route("/login", methods=["GET", "POST"])
