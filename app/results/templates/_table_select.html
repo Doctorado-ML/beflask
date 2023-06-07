@@ -34,36 +34,37 @@
                         onclick="setCheckBoxes(true)">
                     <i class="mdi mdi-checkbox-multiple-marked"></i>
                 </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file, data in files.items() %}
+            {% set parts = file.split('_') %}
+            {% set stratified = parts[6].split('.')[0] %}
+            <tr id="{{ file }}">
+                <td>{{ parts[2] }}</td>
+                <td>{{ parts[1] }}</td>
+                <td>{{ parts[3] }}</td>
+                <td class="text-center">{{ parts[4] }}</td>
+                <td class="text-center">{{ parts[5] }}</td>
+                <td class="text-center">{{ 'True' if stratified =='1' else 'False' }}</td>
+                <td>{{ "%s" % data["title"] }}</td>
+                <td class="text-end">{{ "%.6f" % data["score"] }}</td>
+                <td>
+                    {% set file_best = "best_results_" ~ parts[1] ~ "_" ~ parts[2] ~ ".json" %}
+                    <button class="btn btn-primary btn-small"
+                            onclick='location.href="{{ url_for("results.report", file_name=file) }}"'>
+                        <i class="mdi mdi-table-eye"></i>
+                    </button>
+                    <button class="btn btn-primary btn-small"
+                            onclick='location.href="{{ url_for("results.best", file_name=file_best) }}"'
+                            hidden="true"
+                            name="best_buttons">
+                        <i class="mdi mdi-star-circle-outline"></i>
+                    </button>
+                    <input type="checkbox" name="selected_files" value="{{ file }}" />
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            {% for file, data in files.items() %}
-                {% set parts = file.split('_') %}
-                {% set stratified = parts[6].split('.')[0] %}
-                <tr id="{{ file }}">
-                    <td>{{ parts[2] }}</td>
-                    <td>{{ parts[1] }}</td>
-                    <td>{{ parts[3] }}</td>
-                    <td class="text-center">{{ parts[4] }}</td>
-                    <td class="text-center">{{ parts[5] }}</td>
-                    <td class="text-center">{{ 'True' if stratified =='1' else 'False' }}</td>
-                    <td>{{ "%s" % data["title"] }}</td>
-                    <td class="text-end">{{ "%.6f" % data["score"] }}</td>
-                    <td>
-                        {% set file_best = "best_results_" ~ parts[1] ~ "_" ~ parts[2] ~ ".json" %}
-                        <button class="btn btn-primary btn-small"
-                                onclick='location.href="{{ url_for("results.report", file_name=file) }}"'>
-                            <i class="mdi mdi-table-eye"></i>
-                        </button>
-                        <button class="btn btn-primary btn-small"
-                                onclick='location.href="{{ url_for("results.best", file_name=file_best) }}"'
-                                hidden="true"
-                                name="best_buttons">
-                            <i class="mdi mdi-star-circle-outline"></i>
-                        </button>
-                        <input type="checkbox" name="selected_files" value="{{ file }}" />
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% endfor %}
+    </tbody>
+</table>
