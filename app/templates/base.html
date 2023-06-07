@@ -33,6 +33,7 @@
         <div class="container-fluid">
             {% block content %}{% endblock %}
         </div>
+        {% include "status.html" %}
     </body>
     {% block jscript %}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

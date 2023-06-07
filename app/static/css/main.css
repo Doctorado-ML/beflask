@@ -30,19 +30,18 @@ tbody {
 }
 
 body {
-  padding-bottom: 20px;
+  padding-bottom: 25px;
   padding-top: 60px;
   background-color: #ffb878;
 }
 
-.navbar {
-  margin-bottom: 20px;
+.navbar-custom {
+  height: 20px;
 }
-
-
-
-h2 {
-    margin-top: 20px;
+.pie{
+  color: white;
+  font-size: 0.7rem;
+  padding-left: 0.5rem;
 }
 
 
