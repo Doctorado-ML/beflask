@@ -26,7 +26,8 @@
                     {% if category == 'message' %}
                         {% set category = "info" %}
                     {% endif %}
-                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                    <div class="alert alert-{{ category }} alert-dismissible fade show"
+                         role="alert">{{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
