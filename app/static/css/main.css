@@ -30,13 +30,13 @@ tbody {
 }
 
 body {
-  padding-bottom: 25px;
+  padding-bottom: 35px;
   padding-top: 70px;
   background-color: #ffb878;
 }
 
 .navbar-custom {
-  height: 20px;
+  height: 30px;
 }
 .pie{
   color: white;
