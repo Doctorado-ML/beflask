@@ -240,7 +240,8 @@
             <hr>
             <div class='_1'>{{ message }}</div>
             <div class='_2'>{{ error }}</div>
-            <a class='btn' href='/'>Go Back</a>
+            {% set back_url = back | default('/') %}
+            <a class='btn' href='{{ back_url }}'>Go Back</a>
         </div>
     </body>
 </html>

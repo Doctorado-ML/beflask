@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "report_tables.html" %}
 {% block content %}
     <div class="alert alert-primary" role="alert">
         <h3>{{ title }}</h3>
@@ -15,12 +15,14 @@
             <tbody>
                 {% for dataset, info in data.items() %}
                     <tr>
-                        <td>{{ dataset }}</td>
+                        <td class="text-left">
+                            <a href="{{ url_for("results.dataset_report", dataset=dataset) }}">{{ dataset }}</a>
+                        </td>
                         <td class="text-end">{{ '%9.7f' % info[0] }}</td>
                         <td class="text-center">{{ info[1] }}</td>
                         <td>
                             {% set url = url_for(request.endpoint, **request.view_args)|urlencode %}
-                            <a href="{{ url_for('results.report', file_name = info[2]) }}?url={{ url }}">{{ info[2] }}</a>
+                            <a href="{{ url_for('results.report', file_name = info[2]) }}?url={{ url }}&url_name=Best Results Report">{{ info[2] }}</a>
                         </td>
                     </tr>
                 {% endfor %}

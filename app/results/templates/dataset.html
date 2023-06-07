@@ -1,0 +1,46 @@
+{% extends "report_tables.html" %}
+{% block content %}
+    <div class="alert alert-primary" role="alert">
+        <h3>Results for {{ dataset_name }}</h3>
+    </div>
+    <table id="files-table"
+           class="table table-striped table-hover table-bordered bg-light"
+           data-toggle="table"
+           data-sticky-header="true"
+           data-sticky-header-offset-y="50"
+           data-sortable="true">
+        <thead>
+            <tr class="bg-primary text-white">
+                <th class="text-center" data-field="file" data-sortable="true">File Name</th>
+                <th class="text-center" data-field="samples" data-sortable="true">Samples</th>
+                <th class="text-center" data-field="features" data-sortable="true">Features</th>
+                <th class="text-center" data-field="classes" data-sortable="true">Classes</th>
+                <th class="text-center" data-field="nodes" data-sortable="true">{{ app_config.nodes }}</th>
+                <th class="text-center" data-field="leaves" data-sortable="true">{{ app_config.leaves }}</th>
+                <th class="text-center" data-field="depth" data-sortable="true">{{ app_config.depth }}</th>
+                <th class="text-center" data-field="score" data-sortable="true">Score</th>
+                <th class="text-center" data-field="time" data-sortable="true">Time</th>
+                <th class="text-center" data-field="hyperparameters" data-sortable="true">Hyperparameters</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file_name, item in results.items() %}
+                <tr>
+                    <td class="text-left">
+                        {% set url = url_for(request.endpoint, **request.view_args)|urlencode %}
+                        <a href="{{ url_for('results.report', file_name=file_name) }}?url={{ url }}&url_name={{ dataset_name }} report">{{ file_name }}</a>
+                    </td>
+                    <td class="text-end">{{ '{:,}'.format(item.samples) }}</td>
+                    <td class="text-end">{{"%d" % item.features}}</td>
+                    <td class="text-end">{{"%d" % item.classes}}</td>
+                    <td class="text-end">{{ '{:,.2f}'.format(item.nodes) }}</td>
+                    <td class="text-end">{{ '{:,}'.format(item.leaves) }}</td>
+                    <td class="text-end">{{ '{:,}'.format(item.depth) }}</td>
+                    <td class="text-end">{{"%.6f±%.4f" % (item.score, item.score_std)}}</td>
+                    <td class="text-end">{{"%.6f±%.4f" % (item.time, item.time_std)}}</td>
+                    <td class="text-left">{{ item.hyperparameters }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

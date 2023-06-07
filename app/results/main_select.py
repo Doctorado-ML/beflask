@@ -15,6 +15,7 @@ from flask import (
     send_file,
     url_for,
 )
+from dotenv import dotenv_values
 from flask_login import current_user, login_required
 
 results = Blueprint("results", __name__, template_folder="templates")
@@ -84,6 +85,7 @@ def best(file_name):
             message=f"This best results file ({file_name}) has not been "
             "created yet! or...",
             error=str(e),
+            back=url_for("results.select"),
         )
     info = file_name.split("_")
     model = info[3].split(".")[0]
@@ -103,14 +105,22 @@ def set_compare():
 def report(file_name):
     os.chdir(current_user.benchmark.folder)
     back = request.args.get("url") or ""
+    back_name = request.args.get("url_name") or ""
     with open(os.path.join(Folders.results, file_name)) as f:
         data = json.load(f)
     try:
         summary = process_data(file_name, current_app.config["COMPARE"], data)
     except Exception as e:
-        return render_template("error.html", message=str(e))
+        return render_template(
+            "error.html", message=str(e), back=url_for("results.select")
+        )
     return render_template(
-        "report.html", data=data, file=file_name, summary=summary, back=back
+        "report.html",
+        data=data,
+        file=file_name,
+        summary=summary,
+        back=back,
+        back_name=back_name,
     )
 
 
@@ -177,3 +187,35 @@ def download(file_name):
     os.chdir(current_app.root_path)
     shutil.copyfile(src, dest)
     return send_file(dest, as_attachment=True)
+
+
+@results.route("/dataset_report/<dataset>")
+@login_required
+def dataset_report(dataset):
+    # Get info of the results obtained for a dataset
+    os.chdir(current_user.benchmark.folder)
+    app_config = dotenv_values(".env")
+    dt = Datasets()
+    data = dt.get_attributes(dataset)
+    names = Files.get_all_results(hidden=False)
+    results = {}
+    for name in names:
+        try:
+            with open(os.path.join(Folders.results, name)) as f:
+                data = json.load(f)
+            for result in data["results"]:
+                if dataset == result["dataset"]:
+                    results[name] = result
+        except Exception as e:
+            return render_template(
+                "error.html",
+                message=f"Couldn't process file ({name})",
+                error=str(e),
+                back=url_for("results.dataset_report", dataset=dataset),
+            )
+    return render_template(
+        "dataset.html",
+        dataset_name=dataset,
+        results=results,
+        app_config=app_config,
+    )

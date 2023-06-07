@@ -4,9 +4,9 @@
         <button type="button"
                 class="btn btn-primary position-relative"
                 onclick="location.href='{{ back }}'">
-            Back to Best Results Report
+            Back to {{ back_name }}
             <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                <span class="visually-hidden">Back to Best Results Report</span>
+                <span class="visually-hidden">Back to {{ back_name }}</span>
             </span>
         </button>
     {% endif %}
@@ -85,7 +85,7 @@
                                 data-field="time"
                                 data-sortable="true"
                                 data-sorter="remove_plus">Time</th>
-                            <th class="text-center" data-field="hyperparameters" data-sortable="true">hyperparameters</th>
+                            <th class="text-center" data-field="hyperparameters" data-sortable="true">Hyperparameters</th>
                         </tr>
                     </thead>
                     <script>
@@ -103,7 +103,9 @@
                     <tbody>
                         {% for item in data.results %}
                             <tr>
-                                <td>{{ item.dataset }}</td>
+                                <td class="text-left">
+                                    <a href="{{ url_for("results.dataset_report", dataset=item.dataset) }}">{{ item.dataset }}</a>
+                                </td>
                                 <td class="text-end">{{ '{:,}'.format(item.samples) }}</td>
                                 <td class="text-end">{{"%d" % item.features}}</td>
                                 <td class="text-end">{{"%d" % item.classes}}</td>
