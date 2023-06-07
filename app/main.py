@@ -1,6 +1,6 @@
 import os
 import dotenv
-from benchmark.utils import Files
+from benchmark.Utils import Files
 from flask import (
     Blueprint,
     render_template,
@@ -60,7 +60,6 @@ def set_benchmark(benchmark_id):
 def config():
     os.chdir(current_user.benchmark.folder)
     env = dotenv.dotenv_values(".env")
-    print(env)
     return render_template("config.html", config_env=env)
 
 
