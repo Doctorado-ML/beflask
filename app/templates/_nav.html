@@ -14,7 +14,10 @@
         <div class="collapse navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if current_user.is_authenticated %}
-                    <li>{{ render_nav_item('main.index', "on " + current_user.benchmark.name) }}</li>
+                    <li class="nav-benchmark">
+                        <a href="{{ url_for("main.index") }}"
+                           class="nav-item nav-link nav-benchmark">on {{ current_user.benchmark.name }}</a>
+                    </li>
                 {% endif %}
                 <li>{{ render_nav_item('results.select', 'Results') }}</li>
                 <li>{{ render_nav_item('results.datasets', 'Datasets') }}</li>

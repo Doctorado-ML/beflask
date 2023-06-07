@@ -52,7 +52,7 @@
                 </table>
                 <div>{{ excel_button([ file ]) }}</div>
                 <table class="table table-striped table-hover table-bordered bg-light"
-                       id="table-report"
+                       id="report-table"
                        data-toggle="table"
                        data-sticky-header="true"
                        data-sticky-header-offset-y="50"
@@ -75,7 +75,15 @@
                             <th class="text-center"
                                 data-field="nodes"
                                 data-sortable="true"
-                                data-sorter="remove_dot">Nodes</th>
+                                data-sorter="remove_dot">{{ app_config.nodes }}</th>
+                            <th class="text-center"
+                                data-field="leaves"
+                                data-sortable="true"
+                                data-sorter="remove_dot">{{ app_config.leaves }}</th>
+                            <th class="text-center"
+                                data-field="depth"
+                                data-sortable="true"
+                                data-sorter="remove_dot">{{ app_config.depth }}</th>
                             <th class="text-center"
                                 data-field="score"
                                 data-sortable="true"
@@ -88,18 +96,6 @@
                             <th class="text-center" data-field="hyperparameters" data-sortable="true">Hyperparameters</th>
                         </tr>
                     </thead>
-                    <script>
-                        function remove_plus(a, b) {
-                          var aa = a.split('±')[0]
-                          var bb = b.split('±')[0]
-                          return aa - bb
-                        }
-                        function remove_dot(a, b) {
-                            var aa = a.replace(',', '').replace('.', '')
-                            var bb = b.replace(',', '').replace('.', '')
-                            return aa - bb
-                        }
-                    </script>
                     <tbody>
                         {% for item in data.results %}
                             <tr>
@@ -110,6 +106,8 @@
                                 <td class="text-end">{{"%d" % item.features}}</td>
                                 <td class="text-end">{{"%d" % item.classes}}</td>
                                 <td class="text-end">{{ '{:,.2f}'.format(item.nodes) }}</td>
+                                <td class="text-end">{{ '{:,}'.format(item.leaves) }}</td>
+                                <td class="text-end">{{ '{:,}'.format(item.depth) }}</td>
                                 <td class="text-end">{{"%.6f±%.4f" % (item.score, item.score_std)}}</td>
                                 <td class="text-center">{{ item.symbol|safe }}</td>
                                 <td class="text-end">{{"%.6f±%.4f" % (item.time, item.time_std)}}</td>

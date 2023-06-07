@@ -106,6 +106,7 @@ def report(file_name):
     os.chdir(current_user.benchmark.folder)
     back = request.args.get("url") or ""
     back_name = request.args.get("url_name") or ""
+    app_config = dotenv_values(".env")
     with open(os.path.join(Folders.results, file_name)) as f:
         data = json.load(f)
     try:
@@ -121,6 +122,7 @@ def report(file_name):
         summary=summary,
         back=back,
         back_name=back_name,
+        app_config=app_config,
     )
 
 

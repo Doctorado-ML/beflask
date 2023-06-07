@@ -1,5 +1,5 @@
 {% from "macros.html" import excel_button %}
-{% extends "base.html" %}
+{% extends "report_tables.html" %}
 {% block content %}
     {{ excel_button(["datasets"]) }}
     {% include "_table_datasets.html" %}

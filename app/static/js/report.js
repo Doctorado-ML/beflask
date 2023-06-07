@@ -15,3 +15,13 @@ $(document).ready(function () {
         $("body").removeClass('ajaxLoading');
     });
 });
+function remove_plus(a, b) {
+  var aa = a.split('±')[0]
+  var bb = b.split('±')[0]
+  return aa - bb
+}
+function remove_dot(a, b) {
+    var aa = a.replace(',', '').replace('.', '')
+    var bb = b.replace(',', '').replace('.', '')
+    return aa - bb
+}
