@@ -25,9 +25,21 @@
             </ul>
             <div class="navbar-nav justify-content-end">
                 {% if current_user.is_authenticated %}
-                    <img src='{{ current_user.avatar(40) }}' height=35 alt="gravatar" />
-                    {{ render_nav_item('main.logout',
-                                        current_user.username + '(Logout) ')|safe }}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="navbarDarkDropdownMenuLink"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <img src='{{ current_user.avatar(40) }}' height=35 alt="gravatar" />
+                            {{ current_user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark"
+                            aria-labelledby="navbarDarkDropdownMenuLink">
+                            {{ render_nav_item('main.logout', 'Logout') |safe }}
+                        </ul>
+                    </li>
                 {% else %}
                     {{ render_nav_item('main.login', 'Login') }}
                 {% endif %}
