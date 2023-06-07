@@ -103,11 +103,11 @@
                                     <a href="{{ url_for("results.dataset_report", dataset=item.dataset) }}">{{ item.dataset }}</a>
                                 </td>
                                 <td class="text-end">{{ '{:,}'.format(item.samples) }}</td>
-                                <td class="text-end">{{"%d" % item.features}}</td>
-                                <td class="text-end">{{"%d" % item.classes}}</td>
-                                <td class="text-end">{{ '{:,.2f}'.format(item.nodes) }}</td>
-                                <td class="text-end">{{ '{:,}'.format(item.leaves) }}</td>
-                                <td class="text-end">{{ '{:,}'.format(item.depth) }}</td>
+                                <td class="text-end">{{"%d" % item.features }}</td>
+                                <td class="text-end">{{"%d" % item.classes }}</td>
+                                <td class="text-end">{{ '{:,.2f}'.format(item.nodes|float) }}</td>
+                                <td class="text-end">{{ '{:,.2f}'.format(item.leaves|float) }}</td>
+                                <td class="text-end">{{ '{:,.2f}'.format(item.depth|float) }}</td>
                                 <td class="text-end">{{"%.6f±%.4f" % (item.score, item.score_std)}}</td>
                                 <td class="text-center">{{ item.symbol|safe }}</td>
                                 <td class="text-end">{{"%.6f±%.4f" % (item.time, item.time_std)}}</td>

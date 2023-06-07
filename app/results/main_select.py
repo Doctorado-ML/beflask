@@ -107,13 +107,23 @@ def report(file_name):
     back = request.args.get("url") or ""
     back_name = request.args.get("url_name") or ""
     app_config = dotenv_values(".env")
-    with open(os.path.join(Folders.results, file_name)) as f:
-        data = json.load(f)
     try:
-        summary = process_data(file_name, current_app.config["COMPARE"], data)
+        with open(os.path.join(Folders.results, file_name)) as f:
+            data = json.load(f)
+        try:
+            summary = process_data(
+                file_name, current_app.config["COMPARE"], data
+            )
+        except Exception as e:
+            return render_template(
+                "error.html", message=str(e), back=url_for("results.select")
+            )
     except Exception as e:
         return render_template(
-            "error.html", message=str(e), back=url_for("results.select")
+            "error.html",
+            message=f"This results file ({file_name}) has not been found!",
+            error=str(e),
+            back=url_for("results.select"),
         )
     return render_template(
         "report.html",
