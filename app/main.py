@@ -46,7 +46,7 @@ def set_benchmark(benchmark_id):
     if current_user.admin:
         benchmark = Benchmark.query.filter_by(id=benchmark_id).first()
         if benchmark is None:
-            flash("Benchmark not found.")
+            flash("Benchmark not found.", "danger")
             return redirect(url_for(INDEX))
         current_user.benchmark = benchmark
         db.session.commit()
@@ -71,7 +71,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash("Invalid username or password")
+            flash("Invalid username or password", "danger")
             return redirect(url_for("main.login"))
         login_user(user, remember=form.remember_me.data)
         flash("Logged in successfully.")
