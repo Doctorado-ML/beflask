@@ -37,6 +37,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark"
                             aria-labelledby="navbarDarkDropdownMenuLink">
+                            {% if current_user.admin %}{{ render_nav_item('main.users', 'Users') |safe }}{% endif %}
                             {{ render_nav_item('main.logout', 'Logout') |safe }}
                         </ul>
                     </li>

@@ -22,13 +22,15 @@
         <div class="container-fluid">{% include "_nav.html" %}</div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    {% if category == 'message' %}
-                        {% set category = "info" %}
-                    {% endif %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show"
-                         role="alert">{{ message }}</div>
-                {% endfor %}
+                <div class="col-md-4">
+                    {% for category, message in messages %}
+                        {% if category == 'message' %}
+                            {% set category = "info" %}
+                        {% endif %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show"
+                             role="alert">{{ message }}</div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
         <div class="container-fluid">

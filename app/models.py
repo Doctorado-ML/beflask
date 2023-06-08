@@ -15,6 +15,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     benchmark_id = db.Column(db.Integer, db.ForeignKey("benchmark.id"))
     benchmark = db.relationship("Benchmark")
+    date_created = db.Column(db.DateTime, default=db.func.now())
+    last_login = db.Column(db.DateTime, default=db.func.now())
 
     def __repr__(self):
         return "<User {} {}>".format(self.username, self.email)

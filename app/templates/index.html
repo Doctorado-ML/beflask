@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% if benchmarks %}
-        {% include "_benchmarks.html" %}
+        <div class="d-flex align-items-center" style="height: 60vh">{% include "_benchmarks.html" %}</div>
     {% else %}
         <img src="{{ url_for('static', filename='img/robert-lukeman-_RBcxo9AU-U-unsplash.jpg') }}"
              class="img-fluid"
