@@ -40,3 +40,4 @@ class Benchmark(db.Model):
     name = db.Column(db.String(64), index=True, unique=True)
     description = db.Column(db.String(120), index=False, unique=False)
     folder = db.Column(db.String(128), index=False, unique=True)
+    date_created = db.Column(db.DateTime, default=db.func.now())

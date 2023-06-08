@@ -37,7 +37,10 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark"
                             aria-labelledby="navbarDarkDropdownMenuLink">
-                            {% if current_user.admin %}{{ render_nav_item('admin.users', 'Users') |safe }}{% endif %}
+                            {% if current_user.admin %}
+                                {{ render_nav_item('admin.users', 'Users') |safe }}
+                                {{ render_nav_item('admin.benchmarks', 'Benchmarks') |safe }}
+                            {% endif %}
                             <a class="nav-item nav-link"
                                href="{{ url_for("admin.password", user_id=current_user.id) }}">Password</a>
                             {{ render_nav_item('main.logout', 'Logout') |safe }}

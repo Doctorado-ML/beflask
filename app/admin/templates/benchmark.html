@@ -1,0 +1,12 @@
+{% extends  "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block content %}
+    <div class="alert alert-{{ alert_type }} col-md-4" role="alert">
+        <h4 class="alert-heading">{{ title }}</h4>
+        <button class="btn btn-primary"
+                onclick="window.location.href='{{ url_for("admin.benchmarks") }}'">Back</button>
+        <div class="row">
+            <div>{{ render_form(form) }}</div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+<table id="report-table"
+       class="table table-striped table-hover table-bordered bg-light"
+       data-toggle="table"
+       data-sticky-header="true"
+       data-sticky-header-offset-y="65"
+       data-sortable="true">
+    <thead>
+        <tr class="bg-primary text-white">
+            <th class="text-center">Benchmark</th>
+            <th class="text-center">Description</th>
+            <th class="text-center">Folder</th>
+            <th class="text-center">Date Created</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for benchmark in benchmarks %}
+            <tr>
+                <td class="text-left">{{ benchmark.name }}</td>
+                <td class="text-left">{{ benchmark.description }}</td>
+                <td>{{ benchmark.folder }}</td>
+                <td class="text-center">{{ benchmark.date_created.strftime("%d-%m-%Y, %T") }}</td>
+                <td>
+                    <a href="{{ url_for("admin.benchmark_edit", benchmark_id=benchmark.id) }}"
+                       class="btn btn-primary"><span><i class="mdi mdi-test-tube"></i></span></a>
+                    <a href="{{ url_for("admin.benchmark_delete", benchmark_id=benchmark.id) }}"
+                       class="btn btn-danger"><i class="mdi mdi-test-tube-off"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
