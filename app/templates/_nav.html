@@ -15,7 +15,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if current_user.is_authenticated %}
                     <li class="nav-benchmark">
-                        <a href="{{ url_for("main.index") }}"
+                        <a href="{{ url_for(config.INDEX) }}"
                            class="nav-item nav-link nav-benchmark">on {{ current_user.benchmark.name }}</a>
                     </li>
                 {% endif %}
@@ -37,9 +37,9 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark"
                             aria-labelledby="navbarDarkDropdownMenuLink">
-                            {% if current_user.admin %}{{ render_nav_item('main.users', 'Users') |safe }}{% endif %}
+                            {% if current_user.admin %}{{ render_nav_item('admin.users', 'Users') |safe }}{% endif %}
                             <a class="nav-item nav-link"
-                               href="{{ url_for("main.password", user_id=current_user.id) }}">Password</a>
+                               href="{{ url_for("admin.password", user_id=current_user.id) }}">Password</a>
                             {{ render_nav_item('main.logout', 'Logout') |safe }}
                         </ul>
                     </li>

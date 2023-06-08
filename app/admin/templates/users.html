@@ -1,0 +1,20 @@
+{% extends "report_tables.html" %}
+{% block content %}
+    <div class="container col-7">
+        <div class="alert alert-primary" role="alert">
+            <div class="navbar">
+                <div class="float-left">
+                    <h2>
+                        User <b>Management</b>
+                    </h2>
+                </div>
+                <div class="float-end">
+                    <a href="{{ url_for("admin.user_new") }}" class="btn btn-primary"><span><i class="mdi mdi-plus-circle"></i> Add New User</span></a>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="float-left">{% include "_table_users.html" %}</div>
+    </div>
+</div>
+{% endblock content %}

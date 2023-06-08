@@ -6,6 +6,7 @@ from .config import Config
 from .models import User, db
 
 from .results.main_select import results
+from .admin.main_admin import admin
 from .main import main
 
 bootstrap = Bootstrap5()
@@ -32,6 +33,7 @@ def create_app():
     login_manager.login_view = "main.login"
     app.jinja_env.auto_reload = True
     app.register_blueprint(results, url_prefix="/results")
+    app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(main)
     app.shell_context_processor(make_shell_context)
     with app.app_context():
