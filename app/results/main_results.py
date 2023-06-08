@@ -1,23 +1,25 @@
 import json
 import os
 import shutil
+from pathlib import Path
 
 import xlsxwriter
 from benchmark.Datasets import Datasets
 from benchmark.ResultsBase import StubReport
-from benchmark.ResultsFiles import Excel, ReportDatasets, Benchmark
+from benchmark.ResultsFiles import Benchmark, Excel, ReportDatasets
 from benchmark.Utils import Files, Folders
+from dotenv import dotenv_values
 from flask import (
     Blueprint,
     current_app,
+    redirect,
     render_template,
     request,
     send_file,
     url_for,
-    redirect,
 )
-from dotenv import dotenv_values
 from flask_login import current_user, login_required
+
 from .forms import RankingForm
 
 results = Blueprint("results", __name__, template_folder="templates")
@@ -259,10 +261,6 @@ def ranking():
                 "partial results for some classifiers",
                 error=f"Key not found {str(e)}",
             )
-        return redirect(
-            url_for(
-                "results.download",
-                file_name=benchmark.get_excel_file_name(),
-            )
-        )
+        file_name = Path(benchmark.get_excel_file_name()).name
+        return redirect(url_for("results.download", file_name=file_name))
     return render_template("ranking.html", form=form)
