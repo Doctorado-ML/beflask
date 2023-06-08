@@ -4,7 +4,6 @@ from benchmark.Utils import Files
 from flask import (
     Blueprint,
     render_template,
-    current_app,
     url_for,
     flash,
     redirect,
@@ -12,7 +11,7 @@ from flask import (
 )
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from .forms import LoginForm, UserForm
+from .forms import LoginForm, UserForm, UpdatePasswordForm
 from .models import User, Benchmark, db
 
 main = Blueprint("main", __name__)
@@ -101,7 +100,7 @@ def users():
     return render_template("users.html", users=users)
 
 
-@main.route("/user_edit/<user_id>", methods=["GET", "POST"])
+@main.route("/user_edit/<int:user_id>", methods=["GET", "POST"])
 @login_required
 def user_edit(user_id):
     if user_id != current_user.id and not current_user.admin:
@@ -128,7 +127,7 @@ def user_edit(user_id):
     )
 
 
-@main.route("/user_delete/<user_id>", methods=["GET", "POST"])
+@main.route("/user_delete/<int:user_id>", methods=["GET", "POST"])
 @login_required
 def user_delete(user_id):
     if user_id != current_user.id and not current_user.admin:
@@ -185,4 +184,33 @@ def user_new():
         return redirect(url_for("main.users"))
     return render_template(
         "user.html", form=form, alert_type="info", title="New User"
+    )
+
+
+@main.route(
+    "/password/<user_id>/<back>",
+    methods=["GET", "POST"],
+)
+@main.route(
+    "/password/<user_id>",
+    defaults={"back": "None"},
+    methods=["GET", "POST"],
+)
+@login_required
+def password(user_id, back):
+    if not current_user.admin and user_id != current_user.id:
+        flash("You are not an admin.", "danger")
+        return redirect(url_for(INDEX))
+    form = UpdatePasswordForm()
+    user = User.query.filter_by(id=user_id).first()
+    form.submit.label.text = "Update Password"
+    destination = "main.index" if back == "None" else back
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash("Password updated successfully.")
+        return redirect(url_for(destination))
+    return render_template(
+        "password.html", form=form, back=destination, user_name=user.username
     )

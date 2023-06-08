@@ -48,6 +48,8 @@
                                    class="btn btn-primary"><span><i class="mdi mdi-account"></i></span></a>
                                 <a href="{{ url_for("main.user_delete", user_id=user.id) }}"
                                    class="btn btn-danger"><i class="mdi mdi-account-remove"></i></a>
+                                <a href="{{ url_for("main.password", user_id=user.id, back="main.users") }}"
+                                   class="btn btn-warning"><i class="mdi mdi-lock-reset"></i></a>
                             </td>
                         </tr>
                     {% endfor %}

@@ -65,5 +65,16 @@ class UserForm(FlaskForm):
                     raise ValidationError(message)
 
 
+class UpdatePasswordForm(FlaskForm):
+    password = PasswordField(
+        "Password", validators=[DataRequired(), Length(4, 150)]
+    )
+    password2 = PasswordField(
+        "Password",
+        validators=[DataRequired(), Length(4, 150), EqualTo("password")],
+    )
+    submit = SubmitField()
+
+
 class BenchmarkSelect(FlaskForm):
     submit = SubmitField("Select")

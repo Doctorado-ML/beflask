@@ -38,6 +38,8 @@
                         <ul class="dropdown-menu dropdown-menu-dark"
                             aria-labelledby="navbarDarkDropdownMenuLink">
                             {% if current_user.admin %}{{ render_nav_item('main.users', 'Users') |safe }}{% endif %}
+                            <a class="nav-item nav-link"
+                               href="{{ url_for("main.password", user_id=current_user.id) }}">Password</a>
                             {{ render_nav_item('main.logout', 'Logout') |safe }}
                         </ul>
                     </li>
