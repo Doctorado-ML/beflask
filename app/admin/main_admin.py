@@ -106,11 +106,11 @@ def user_new():
 
 
 @admin.route(
-    "/password/<user_id>/<back>",
+    "/password/<int:user_id>/<back>",
     methods=["GET", "POST"],
 )
 @admin.route(
-    "/password/<user_id>",
+    "/password/<int:user_id>",
     defaults={"back": "None"},
     methods=["GET", "POST"],
 )

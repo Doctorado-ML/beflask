@@ -35,7 +35,7 @@ def index():
     return render_template("index.html", benchmarks=benchmarks)
 
 
-@main.route("/set_benchmark/<benchmark_id>")
+@main.route("/set_benchmark/<int:benchmark_id>")
 @login_required
 def set_benchmark(benchmark_id):
     if int(benchmark_id) == current_user.benchmark_id:

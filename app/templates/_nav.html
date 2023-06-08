@@ -18,10 +18,10 @@
                         <a href="{{ url_for(config.INDEX) }}"
                            class="nav-item nav-link nav-benchmark">on {{ current_user.benchmark.name }}</a>
                     </li>
+                    <li>{{ render_nav_item('results.select', 'Results') }}</li>
+                    <li>{{ render_nav_item('results.datasets', 'Datasets') }}</li>
+                    <li>{{ render_nav_item('main.config', 'Config') }}</li>
                 {% endif %}
-                <li>{{ render_nav_item('results.select', 'Results') }}</li>
-                <li>{{ render_nav_item('results.datasets', 'Datasets') }}</li>
-                <li>{{ render_nav_item('main.config', 'Config') }}</li>
             </ul>
             <div class="navbar-nav justify-content-end">
                 {% if current_user.is_authenticated %}
