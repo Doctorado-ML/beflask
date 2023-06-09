@@ -15,10 +15,14 @@
                         <option value="f1-weighted">f1-weighted</option>
                         <option value="roc-auc-ovr">roc-auc-ovr</option>
                     </select>
-                    <input id="excel" type="checkbox" name="excel">
-                    Generate Excel
-                    <input id="html" type="checkbox" name="html">
-                    Generate Html
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="excel">
+                        <label class="form-check-label" for="flexCheckDefault">Generate Excel</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="html">
+                        <label class="form-check-label" for="flexCheckChecked">Generate HTML</label>
+                    </div>
                 </div>
                 <button type="button"
                         class="btn btn-primary"
@@ -74,13 +78,7 @@
     {{ super() }}
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
-            $("#submit").click(function () {
-                $("#submit").attr("disabled", true);
-                $("#submit").val("Generating...");
-                $("#score").attr("disabled", true);
-                $("#excel").attr("disabled", true);
-                $('.progress').removeAttr("hidden");
-            });
+
             $("#excel").change(function () {
                 if (!$("#excel").is(":checked") && !$("#html").is(":checked")) {
                     $("#submit").attr("disabled", true);
@@ -120,9 +118,11 @@
                     $("#excel").attr("onclick",action);
                     $("#excel_button").removeAttr("hidden");
                 }
-                $("#html_button").attr("onclick", "window.open('"+msg.payload.html +"', '_blank')");
+                if ($("#html").is(":checked")) {
+                    $("#html_button").attr("onclick", "window.open('"+msg.payload.html +"', '_blank')");
+                    $("#html_button").removeAttr("hidden");
+                }
                 $("#button_container").removeAttr("hidden");
-                $("#html_button").removeAttr("hidden");
                 update_bar = false;
             }
             if (msg.status=="Error") {
@@ -139,6 +139,22 @@
             $("#status").removeAttr("hidden");
             $("#status-alert").removeAttr("hidden");
             $(".progress").removeAttr("hidden");
+        }
+        function send() {
+            var data= {
+                action: "ReadyToRock!", 
+                score: document.getElementById('score').value, 
+                excel: document.getElementById('excel').checked, 
+                html: document.getElementById('html').checked
+            };
+            $("#score").attr("disabled", true);
+            $("#excel").attr("disabled", true);
+            $("#html").attr("disabled", true);
+            socket.emit('client', data);
+            $("#status").removeAttr("hidden");
+            $("#status-alert").removeAttr("hidden");
+            $(".progress").removeAttr("hidden");
+            $("#submit").attr("hidden", true);
         }
     </script>
 {% endblock %}

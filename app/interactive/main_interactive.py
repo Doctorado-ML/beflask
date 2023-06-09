@@ -19,7 +19,11 @@ def ranking():
 def handle_client(message):
     current_app.logger.info(message)
     if message.get("action") == "ReadyToRock!":
-        get_benchmark(message.get("score"), excel=message.get("excel", False))
+        get_benchmark(
+            score=message.get("score"),
+            excel=message.get("excel", False),
+            html=message.get("html", False),
+        )
     current_app.socket.emit("server", {"message": "Ready!", "percentage": 0})
 
 
@@ -33,7 +37,7 @@ def send_message(message, percentage, status="Ok", payload={}):
     current_app.socket.emit("server", output)
 
 
-def get_benchmark(score, excel=False):
+def get_benchmark(score, excel=False, html=False):
     def move_exreport():
         src = os.path.join(
             current_user.benchmark.folder, "exreport", "exreport_output"
@@ -43,19 +47,25 @@ def get_benchmark(score, excel=False):
         )
         shutil.copytree(src, dst, dirs_exist_ok=True)
 
-    benchmark = Benchmark(score=score, visualize=True)
+    def progress(step):
+        values = [0, 20, 40, 60, 80]
+        if excel:
+            values = [0, 40, 60, 80, 100]
+        return values[step]
+
+    benchmark = Benchmark(score=score, visualize=html)
     send_message("Start", 0)
     try:
         send_message("Generating ranking...", 0)
         benchmark.compile_results()
-        send_message("Saving results...", 20 if excel else 40)
+        send_message("Saving results...", progress(1))
         benchmark.save_results()
-        send_message("Generating report...", 40 if excel else 60)
+        send_message("Generating report...", progress(2))
         benchmark.report(tex_output=False)
-        send_message("Generating exreport...", 60 if excel else 80)
+        send_message("Generating exreport...", progress(3))
         benchmark.exreport()
         if excel:
-            send_message("Generating excel...", 80)
+            send_message("Generating excel...", progress(4))
             benchmark.excel()
     except ValueError as e:
         send_message(
