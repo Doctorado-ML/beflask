@@ -48,9 +48,9 @@ def get_benchmark(score, excel=False, html=False):
         shutil.copytree(src, dst, dirs_exist_ok=True)
 
     def progress(step):
-        values = [0, 20, 40, 60, 80]
+        values = [0, 40, 60, 80]
         if excel:
-            values = [0, 40, 60, 80, 100]
+            values = [0, 20, 40, 60, 80, 100]
         return values[step]
 
     benchmark = Benchmark(score=score, visualize=html)
@@ -84,9 +84,15 @@ def get_benchmark(score, excel=False, html=False):
         )
         return
     # copy the results to the static folder
-    move_exreport()
+    if html:
+        move_exreport()
     excel_payload = (
-        "" if not excel else str(Path(benchmark.get_excel_file_name()))
+        "" if not excel else str(Path(benchmark.get_excel_file_name()).name)
+    )
+    html_payload = (
+        ""
+        if not html
+        else url_for("static", filename="exreport/exreport_output/report.html")
     )
     current_app.logger.info("excel_payload:" + excel_payload)
     send_message(
@@ -94,8 +100,6 @@ def get_benchmark(score, excel=False, html=False):
         100,
         payload={
             "excel": excel_payload,
-            "html": url_for(
-                "static", filename="exreport/exreport_output/report.html"
-            ),
+            "html": html_payload,
         },
     )
