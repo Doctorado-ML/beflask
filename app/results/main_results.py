@@ -1,26 +1,22 @@
 import json
 import os
 import shutil
-from pathlib import Path
 
 import xlsxwriter
 from benchmark.Datasets import Datasets
 from benchmark.ResultsBase import StubReport
-from benchmark.ResultsFiles import Benchmark, Excel, ReportDatasets
+from benchmark.ResultsFiles import Excel, ReportDatasets
 from benchmark.Utils import Files, Folders
 from dotenv import dotenv_values
 from flask import (
     Blueprint,
     current_app,
-    redirect,
     render_template,
     request,
     send_file,
     url_for,
 )
 from flask_login import current_user, login_required
-
-from .forms import RankingForm
 
 results = Blueprint("results", __name__, template_folder="templates")
 
@@ -235,32 +231,3 @@ def dataset_report(dataset):
         results=results,
         app_config=app_config,
     )
-
-
-@results.route("/ranking", methods=["GET", "POST"])
-@login_required
-def ranking():
-    os.chdir(current_user.benchmark.folder)
-    form = RankingForm()
-    if form.validate_on_submit():
-        benchmark = Benchmark(score=form.score.data, visualize=False)
-        try:
-            benchmark.compile_results()
-            benchmark.save_results()
-            benchmark.report(tex_output=False)
-            benchmark.exreport()
-            benchmark.excel()
-        except ValueError as e:
-            return render_template(
-                "error.html", message="Couldn't generate ranking", error=str(e)
-            )
-        except KeyError as e:
-            return render_template(
-                "error.html",
-                message="Couldn't generate ranking. It seems that there are "
-                "partial results for some classifiers",
-                error=f"Key not found {str(e)}",
-            )
-        file_name = Path(benchmark.get_excel_file_name()).name
-        return redirect(url_for("results.download", file_name=file_name))
-    return render_template("ranking.html", form=form)

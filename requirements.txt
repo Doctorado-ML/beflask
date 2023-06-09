@@ -1,0 +1,8 @@
+flask
+flask-login
+bootstrap-flask
+flask-sqlalchemy
+flask-socketio
+flask-wtf
+simple-websocket
+email-validator

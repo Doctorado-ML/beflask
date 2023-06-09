@@ -2,11 +2,13 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
+from flask_socketio import SocketIO
 from .config import Config
 from .models import User, db
 
 from .results.main_results import results
 from .admin.main_admin import admin
+
 from .main import main
 
 bootstrap = Bootstrap5()
@@ -36,6 +38,12 @@ def create_app():
     app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(main)
     app.shell_context_processor(make_shell_context)
+    socketio = SocketIO(app)
     with app.app_context():
         db.create_all()
-    return app
+        app.socket = socketio
+        from .interactive.main_interactive import interactive
+
+        app.register_blueprint(interactive, url_prefix="/admin")
+
+    return socketio, app

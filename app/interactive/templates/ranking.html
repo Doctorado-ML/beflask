@@ -1,0 +1,144 @@
+{% extends  "iobase.html" %}
+{% block content %}
+    <div class="alert alert-{{ alert_type }} col-md-4" role="alert">
+        <h4 class="alert-heading">{{ title }}</h4>
+        <button class="btn btn-primary"
+                onclick="window.location.href='{{ url_for("main.index") }}'">Back</button>
+        <div class="row">
+            <div>
+                <div class="mb-3">
+                    <label class="form-label" for="score">Score</label>
+                    <select class="form-select" id="score" name="score">
+                        <option value="accuracy">accuracy</option>
+                        <option value="f1-macro">f1-macro</option>
+                        <option value="f1-micro">f1-micro</option>
+                        <option value="f1-weighted">f1-weighted</option>
+                        <option value="roc-auc-ovr">roc-auc-ovr</option>
+                    </select>
+                    <input id="excel" type="checkbox" name="excel">
+                    Generate Excel
+                    <input id="html" type="checkbox" name="html">
+                    Generate Html
+                </div>
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="send()"
+                        id="submit"
+                        disabled>Generate</button>
+                <div class="mb-3">
+                    <div class="alert alert-success" role="alert" id="status-alert" hidden>
+                        <input id="status"
+                               name="status"
+                               type="text"
+                               readonly
+                               size="79"
+                               class="bg-success text-white"
+                               hidden>
+                    </div>
+                    <div class="progress"
+                         role="progressbar"
+                         aria-label="Animated striped example"
+                         aria-valuenow="0"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         hidden>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                             id="bar-value"></div>
+                    </div>
+                    <div class="alert alert-success" role="alert" id="button_container" hidden>
+                        <button class="btn btn-primary btn-small"
+                                id="excel_button"
+                                onclick="{{ call }}"
+                                hidden>
+                            <i class="mdi mdi-file-excel"></i> Benchmark
+                        </button>
+                        <button class="btn btn-primary btn-small"
+                                id="html_button"
+                                onclick="{{ call }}"
+                                hidden>
+                            <i class="mdi mdi-language-html5"></i> Exreport
+                        </button>
+                        <button class="btn btn-primary btn-small"
+                                id="go_back"
+                                onclick="location.href='/index'"
+                                hidden>
+                            <i class="mdi mdi-home-circle"></i> Go Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block jscript %}
+    {{ super() }}
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                $("#submit").attr("disabled", true);
+                $("#submit").val("Generating...");
+                $("#score").attr("disabled", true);
+                $("#excel").attr("disabled", true);
+                $('.progress').removeAttr("hidden");
+            });
+            $("#excel").change(function () {
+                if (!$("#excel").is(":checked") && !$("#html").is(":checked")) {
+                    $("#submit").attr("disabled", true);
+                } else {
+                    $("#submit").removeAttr("disabled");
+                }
+            });
+            $("#html").change(function () {
+                if (!$("#excel").is(":checked") && !$("#html").is(":checked")) {
+                    $("#submit").attr("disabled", true);
+                } else {
+                    $("#submit").removeAttr("disabled");
+                }
+            });
+        });
+        var socket = io();
+        var update_bar = false;
+        socket.on('connect', function() {
+            socket.emit('client', {data: 'Connected.'});
+        });
+        socket.on('server', function(msg) {
+            var text = document.getElementById('status');
+            text.value = msg.message;
+            if (update_bar) {
+                $(".progress-bar").attr("style", "width: "+msg.percentage+"%");
+                $('.progress-bar').attr('aria-valuenow', msg.percentage).css('width',  msg.percentage+'%');
+                $('#bar-value').html(msg.percentage+"%");
+            }
+            if (msg.message == "Start") {
+                update_bar = true;
+            }
+            if (msg.message == "Done!") {
+                if ($("#excel").is(":checked")) {
+                    let action = "window.open('/results/download/" + msg.payload.excel +"', '_blank')";
+                    alert(action);
+                    console.log(action);
+                    $("#excel").attr("onclick",action);
+                    $("#excel_button").removeAttr("hidden");
+                }
+                $("#html_button").attr("onclick", "window.open('"+msg.payload.html +"', '_blank')");
+                $("#button_container").removeAttr("hidden");
+                $("#html_button").removeAttr("hidden");
+                update_bar = false;
+            }
+            if (msg.status=="Error") {
+                $('#status-alert').removeClass("alert-success").addClass("alert-danger").removeAttr("hidden");
+                $('#status').addClass("bg-danger text-white").removeClass("bg-success");
+                $("#status").text=msg.message;
+            }
+            $("#go_back").removeAttr("hidden");
+            
+        });
+        function send() {
+            var data= {action: "ReadyToRock!", score: document.getElementById('score').value, excel: document.getElementById('excel').checked};
+            socket.emit('client', data);
+            $("#status").removeAttr("hidden");
+            $("#status-alert").removeAttr("hidden");
+            $(".progress").removeAttr("hidden");
+        }
+    </script>
+{% endblock %}
