@@ -48,4 +48,8 @@ body {
   color:yellow;
 }
 
-
+.custom-popover {
+  --bs-popover-border-color: var(--bs-primary);
+  --bs-popover-header-bg: var(--bs-primary);
+  --bs-popover-header-color: var(--bs-white);
+}

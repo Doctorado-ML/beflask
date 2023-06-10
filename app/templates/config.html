@@ -13,7 +13,16 @@
             <tbody>
                 {% for item, value in config_env.items() %}
                     <tr>
-                        <td>{{ item }}</td>
+                        <td>
+                            {{ item }}
+                            <i tabindex="{{ loop.index }}"
+                               class="mdi mdi-help-circle-outline"
+                               data-bs-toggle="popover"
+                               data-bs-custom-class="custom-popover"
+                               data-bs-trigger="focus"
+                               title="{{ item }}"
+                               data-bs-content="{{ explanations[item] }}"></i>
+                        </td>
                         <td>{{ value }}</td>
                     </tr>
                 {% endfor %}
@@ -21,3 +30,10 @@
         </table>
     </div>
 {% endblock content %}
+{% block jscript %}
+    {{ super() }}
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+    </script>
+{% endblock jscript %}

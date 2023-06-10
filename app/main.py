@@ -56,9 +56,28 @@ def set_benchmark(benchmark_id):
 @main.route("/config")
 @login_required
 def config():
+    explanations = {
+        "score": "Deafult score if none is provided",
+        "platform": "Name of the platform running benchmarks",
+        "n_folds": "# of folds to split train & test samples",
+        "model": "Default model used if none is provided",
+        "stratified": "Wether or not to split data in a stratified way",
+        "source_data": "Type of datasets",
+        "discretize": "Discretize of not datasets before training",
+        "fit_features": "Wheter or not to include features names in fit",
+        "seeds": "Seeds used to train/test models",
+        "nodes": "Label for nodes in report",
+        "leaves": "Label for leaves in report",
+        "depth": "Label for depth in report",
+        "margin": "Margin to add to ZeroR classifier in binary classes "
+        "datasets",
+        "framework": "HTML Framework default used in be_flask command",
+    }
     os.chdir(current_user.benchmark.folder)
     env = dotenv.dotenv_values(".env")
-    return render_template("config.html", config_env=env)
+    return render_template(
+        "config.html", config_env=env, explanations=explanations
+    )
 
 
 @main.route("/login", methods=["GET", "POST"])
