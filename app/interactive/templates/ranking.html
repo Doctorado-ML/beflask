@@ -35,8 +35,7 @@
                                name="status"
                                type="text"
                                readonly
-                               size="79"
-                               class="bg-success text-white"
+                               class="bg-success text-white form-control"
                                hidden>
                     </div>
                     <div class="progress"
@@ -112,7 +111,7 @@
             }
             if (msg.message == "Done!") {
                 if ($("#excel").is(":checked")) {
-                    $("#excel_button").attr("onclick", "window.open('/results/download/" + msg.payload.excel +"', '_blank')");
+                    $("#excel_button").attr("onclick", "window.open('" + msg.payload.excel +"', '_blank')");
                     $("#excel_button").removeAttr("hidden");
                 }
                 if ($("#html").is(":checked")) {

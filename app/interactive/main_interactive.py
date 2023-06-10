@@ -87,7 +87,12 @@ def get_benchmark(score, excel=False, html=False):
     if html:
         move_exreport()
     excel_payload = (
-        "" if not excel else str(Path(benchmark.get_excel_file_name()).name)
+        ""
+        if not excel
+        else url_for(
+            "results.download",
+            file_name=str(Path(benchmark.get_excel_file_name()).name),
+        )
     )
     html_payload = (
         ""
