@@ -1,9 +1,10 @@
 #!/usr/bin/env python
+import os
 from flask import Flask
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
 from flask_socketio import SocketIO
-from .config import Config
+from .config import config, load_env
 from .models import User, db
 
 from .results.main_results import results
@@ -28,8 +29,9 @@ def make_shell_context():
 def create_app():
     app = Flask(__name__)
     bootstrap.init_app(app)
-    # app.register_blueprint(results)
-    app.config.from_object(Config)
+    load_env()
+    config_object = config[os.getenv("BEFLASK_ENV", "development")]
+    app.config.from_object(config_object)
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = "main.login"

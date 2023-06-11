@@ -1,5 +1,5 @@
-from app.models import Benchmark, db, User
-from app import app
+from beflask.models import Benchmark, db, User
+from beflask import app
 
 app = app.create_app()
 

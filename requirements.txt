@@ -1,3 +1,4 @@
+benchmark
 flask
 flask-login
 bootstrap-flask

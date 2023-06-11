@@ -1,5 +1,53 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["beflask"]
+license-files = ["LICENSE"]
+
+[tool.setuptools.dynamic]
+version = { attr = "beflask.__version__" }
+dependencies = {file = ["requirements.txt"]}
+
+[project]
+name = "beflask"
+description = "Flask application to manage benchmarking experiments"
+readme = "README.md"
+authors = [
+  { name = "Ricardo Montañana", email = "ricardo.montanana@alu.uclm.es" },
+]
+dynamic = ['version', 'dependencies']
+
+requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development",
+  "Topic :: Scientific/Engineering",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+
+[project.optional-dependencies]
+dev = ["black", "pre-commit", "flake8", "mypy"]
+
+[project.urls]
+Home = "https://github.com/doctorado-ml/beflask"
+
+[tool.coverage.run]
+source = ["beflask"]
+
 [tool.black]
 line-length = 79
+target_version = ['py38', 'py39', 'py310']
 include = '\.pyi?$'
 exclude = '''
 /(

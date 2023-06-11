@@ -13,7 +13,7 @@ from wtforms.validators import (
     Email,
     ValidationError,
 )
-from app.models import User
+from beflask.models import User
 
 
 class UserForm(FlaskForm):
