@@ -8,10 +8,9 @@ def get_base_dir():
     return os.path.abspath(os.path.dirname(__file__))
 
 
-def load_env():
-    dotenv_file = ".env"
-    file_name = os.path.join(get_base_dir(), dotenv_file)
-    load_dotenv(file_name)
+dotenv_file = ".env"
+file_name = os.path.join(get_base_dir(), dotenv_file)
+load_dotenv(file_name)
 
 
 class Config(object):
@@ -40,6 +39,7 @@ class ProductionConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite://"
+    WTF_CSRF_ENABLED = False
     SOCKETIO_MESSAGE_QUEUE = None
 
 

@@ -9,7 +9,8 @@ with app.app_context():
     b = Benchmark(
         name="discretizbench",
         folder="/app/discretizbench",
-        description="Experiments with local discretization and Bayesian classifiers",
+        description="Experiments with local discretization and Bayesian "
+        "classifiers",
     )
     db.session.add(b)
     b = Benchmark(
@@ -30,7 +31,7 @@ with app.app_context():
         admin=True,
         benchmark_id=1,
     )
-    u.set_password("patata")
+    u.set_password("galeote")
     u1 = User(
         username="guest",
         email="guest@example.com",

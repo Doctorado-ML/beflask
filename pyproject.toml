@@ -37,13 +37,17 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-dev = ["black", "pre-commit", "flake8", "mypy"]
+dev = ["black", "pre-commit", "flake8", "mypy", "coverage"]
 
 [project.urls]
 Home = "https://github.com/doctorado-ml/beflask"
 
 [tool.coverage.run]
+branch = true
 source = ["beflask"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.black]
 line-length = 79
