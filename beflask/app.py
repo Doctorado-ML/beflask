@@ -26,7 +26,7 @@ def make_shell_context():
     return {"db": db, "User": User}
 
 
-def create_app(config_name=None):
+def create_app(config_name=None, return_socketio=False):
     if config_name is None:
         config_name = os.environ.get("BEFLASK_ENV", "development")
     app = Flask(__name__)
@@ -47,5 +47,7 @@ def create_app(config_name=None):
         from .interactive.main_interactive import interactive
 
         app.register_blueprint(interactive, url_prefix="/admin")
-
-    return socketio, app
+    if return_socketio:
+        return socketio, app
+    else:
+        return app
