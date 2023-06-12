@@ -2,7 +2,7 @@ from flask import session, g, url_for
 
 
 def test_login(app, client, auth, admin_user, admin_password):
-    with app[1].test_request_context():
+    with app.test_request_context():
         url_login = url_for("main.login")
         url_index = url_for("main.index")
 
@@ -34,7 +34,7 @@ def test_login_invalid(auth, admin_user):
 
 
 def test_access_page_not_logged(client, app, auth, guest_user, guest_password):
-    with app[1].test_request_context():
+    with app.test_request_context():
         url_login = url_for("main.login")
         url_config = url_for("main.config")
     # Check if a not logged in user is redirected to login with next param

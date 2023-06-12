@@ -2,9 +2,9 @@ from flask import url_for, g
 from beflask import app
 
 
-# def test_config_init():
-#     assert not app.create_app()[1].testing
-#     assert app.create_app("testing")[1].testing
+def test_config_init():
+    assert not app.create_app().testing
+    assert app.create_app("testing").testing
 
 
 def test_index(client):
@@ -30,7 +30,7 @@ def test_index_logged(client, auth):
 
 def test_set_benchmark_guest(client, auth, app):
     assert auth.login(follow_redirects=True).status_code == 200
-    with app[1].test_request_context():
+    with app.test_request_context():
         url = url_for("main.set_benchmark", benchmark_id=1)
         with client:
             response = client.get(url, follow_redirects=True)
@@ -51,7 +51,7 @@ def test_set_benchmark_admin(client, auth, app, admin_user, admin_password):
         ).status_code
         == 200
     )
-    with app[1].test_request_context():
+    with app.test_request_context():
         url = url_for("main.set_benchmark", benchmark_id=1)
         with client:
             response = client.get(url, follow_redirects=True)
@@ -94,7 +94,7 @@ def test_config(app, client, auth):
         "framework": "HTML Framework default used in be_flask command",
     }
     assert auth.login(follow_redirects=True).status_code == 200
-    with app[1].test_request_context():
+    with app.test_request_context():
         url = url_for("main.config")
         with client:
             response = client.get(url)

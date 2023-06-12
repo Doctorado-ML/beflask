@@ -36,21 +36,21 @@ def auth(client):
 
 @pytest.fixture
 def app(admin_user, admin_password):
-    socketio, app = application.create_app("testing")
+    app = application.create_app("testing")
     app.test_client_class = FlaskLoginClient
     with app.app_context():
         db_seed(db, admin_user, admin_password)
-    return socketio, app
+    return app
 
 
 @pytest.fixture
 def client(app):
-    return app[1].test_client()
+    return app.test_client()
 
 
 @pytest.fixture
 def runner(app):
-    return app[1].test_cli_runner()
+    return app.test_cli_runner()
 
 
 @pytest.fixture
