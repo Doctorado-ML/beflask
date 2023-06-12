@@ -46,7 +46,7 @@ def create_app(config_name=None, return_socketio=False):
         app.socket = socketio
         from .interactive.main_interactive import interactive
 
-        app.register_blueprint(interactive, url_prefix="/admin")
+        app.register_blueprint(interactive, url_prefix="/bench")
     if return_socketio:
         return socketio, app
     else:
