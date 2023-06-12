@@ -18,9 +18,6 @@ class User(UserMixin, db.Model):
     date_created = db.Column(db.DateTime, default=db.func.now())
     last_login = db.Column(db.DateTime, default=db.func.now())
 
-    def __repr__(self):
-        return "<User {} {}>".format(self.username, self.email)
-
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

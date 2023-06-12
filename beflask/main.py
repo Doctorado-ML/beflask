@@ -105,4 +105,6 @@ def login():
 def logout():
     if current_user.is_authenticated:
         logout_user()
+    else:
+        flash("You are not logged in.", "danger")
     return redirect(url_for(current_app.config["INDEX"]))
