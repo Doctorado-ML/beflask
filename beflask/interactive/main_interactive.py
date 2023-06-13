@@ -1,9 +1,15 @@
 import os
 import shutil
 from pathlib import Path
-from flask import Blueprint, render_template, url_for, current_app
+
+import dotenv
+from benchmark.Datasets import Datasets
+from benchmark.Models import Models
 from benchmark.ResultsFiles import Benchmark
+from flask import Blueprint, current_app, render_template, url_for
 from flask_login import current_user, login_required
+
+from .forms import BenchmarkDatasetForm
 
 interactive = Blueprint("interactive", __name__, template_folder="templates")
 
@@ -15,15 +21,49 @@ def ranking():
     return render_template("ranking.html")
 
 
+@interactive.route("/experiment", methods=["GET", "POST"])
+@login_required
+def experiment():
+    os.chdir(current_user.benchmark.folder)
+    env = dotenv.dotenv_values(".env")
+    models = Models.define_models(random_state=0).keys()
+    form = BenchmarkDatasetForm()
+    form.dataset.choices = [(d, d) for d in list(Datasets())]
+    form.model.choices = [(b, b) for b in models]
+    if form.validate_on_submit():
+        model = form.model.data
+        score = form.score.data
+        dataset = form.dataset.data
+        n_folds = form.n_folds.data
+        stratified = "1" if form.stratified.data else "0"
+        discretize = "1" if form.discretize.data else "0"
+        ignore_nan = "1" if form.ignore_nan.data else "0"
+        hyperparameters = form.hyperparameters.data
+
+        return redirect(url_for("interactive.ranking"))
+
+    form.model.data = env.get("model")
+    form.score.data = env.get("score")
+    form.n_folds.data = env.get("n_folds", 5)
+    form.stratified.data = env.get("stratified", "0") == "1"
+    form.discretize.data = env.get("discretize", "0") == "1"
+    return render_template("experiment.html", form=form, title="Experiment")
+
+
 @current_app.socket.on("client")
 def handle_client(message):
     current_app.logger.info(message)
-    if message.get("action") == "ReadyToRock!":
-        get_benchmark(
-            score=message.get("score"),
-            excel=message.get("excel", False),
-            html=message.get("html", False),
-        )
+    match message.get("action"):
+        case "ReadyToRock!":
+            # Benchmark
+            get_benchmark(
+                score=message.get("score"),
+                excel=message.get("excel", False),
+                html=message.get("html", False),
+            )
+        case "ReadyToRoll!":
+            # Experiment
+            pass
     current_app.socket.emit("server", {"message": "Ready!", "percentage": 0})
 
 

@@ -1,6 +1,23 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, SelectField, TextAreaField
+from wtforms import (
+    SubmitField,
+    SelectField,
+    TextAreaField,
+    BooleanField,
+    IntegerField,
+)
 from benchmark.Arguments import ALL_METRICS
+
+
+class BenchmarkDatasetForm(FlaskForm):
+    score = SelectField("Score", choices=ALL_METRICS)
+    model = SelectField("Model")
+    dataset = SelectField("Dataset")
+    discretize = BooleanField("Discretize")
+    stratified = BooleanField("Stratified")
+    ignore_nan = BooleanField("Ignore NaN")
+    n_folds = IntegerField("# Folds")
+    hyperparameters = TextAreaField("Hyperparameters")
 
 
 # ----- NOT USED ----- #
