@@ -130,14 +130,6 @@
             
         });
         function send() {
-            var data= {action: "ReadyToRock!", score: document.getElementById('score').value, excel: document.getElementById('excel').checked};
-            socket.emit('client', data);
-            $("#status").removeAttr("hidden");
-            $("#status-alert").removeAttr("hidden");
-            $(".progress").removeAttr("hidden");
-            $("#submit").attr("hidden", true);
-        }
-        function send() {
             var data= {
                 action: "ReadyToRock!", 
                 score: document.getElementById('score').value, 

@@ -39,14 +39,12 @@ def experiment():
         discretize = "1" if form.discretize.data else "0"
         ignore_nan = "1" if form.ignore_nan.data else "0"
         hyperparameters = form.hyperparameters.data
-
-        return redirect(url_for("interactive.ranking"))
-
-    form.model.data = env.get("model")
-    form.score.data = env.get("score")
-    form.n_folds.data = env.get("n_folds", 5)
-    form.stratified.data = env.get("stratified", "0") == "1"
-    form.discretize.data = env.get("discretize", "0") == "1"
+    else:
+        form.model.data = env.get("model")
+        form.score.data = env.get("score")
+        form.n_folds.data = env.get("n_folds", 5)
+        form.stratified.data = env.get("stratified", "0") == "1"
+        form.discretize.data = env.get("discretize", "0") == "1"
     return render_template("experiment.html", form=form, title="Experiment")
 
 

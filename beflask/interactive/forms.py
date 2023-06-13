@@ -18,6 +18,7 @@ class BenchmarkDatasetForm(FlaskForm):
     ignore_nan = BooleanField("Ignore NaN")
     n_folds = IntegerField("# Folds")
     hyperparameters = TextAreaField("Hyperparameters")
+    submit = SubmitField("Do Experiment!")
 
 
 # ----- NOT USED ----- #
