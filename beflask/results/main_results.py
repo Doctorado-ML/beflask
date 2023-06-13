@@ -195,8 +195,13 @@ def excel():
 def download(file_name):
     os.chdir(current_user.benchmark.folder)
     src = os.path.join(current_user.benchmark.folder, Folders.excel, file_name)
-    dest = os.path.join("static", "excel", file_name)
+    dest_path = os.path.join("static", "excel", current_user.username)
+    dest = os.path.join(dest_path, file_name)
     os.chdir(current_app.root_path)
+    try:
+        os.makedirs(dest_path)
+    except FileExistsError:
+        pass
     shutil.copyfile(src, dest)
     return send_file(dest, as_attachment=True)
 
