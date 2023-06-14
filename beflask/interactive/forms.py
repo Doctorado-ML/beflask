@@ -17,6 +17,7 @@ class BenchmarkDatasetForm(FlaskForm):
     stratified = BooleanField("Stratified")
     ignore_nan = BooleanField("Ignore NaN")
     fit_features = BooleanField("Fit Features")
+    best_results = BooleanField("Compare to Best Results")
     n_folds = IntegerField("# Folds")
     hyperparameters = TextAreaField("Hyperparameters")
     submit = SubmitField("Do Experiment!")

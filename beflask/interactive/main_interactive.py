@@ -43,6 +43,7 @@ def experiment():
         discretize = "1" if form.discretize.data else "0"
         ignore_nan = "1" if form.ignore_nan.data else "0"
         fit_features = "1" if form.fit_features.data else "0"
+        best_results = "1" if form.best_results.data else "0"
         hyperparameters = form.hyperparameters.data or "{}"
         back = url_for("interactive.experiment")
         try:
@@ -61,7 +62,7 @@ def experiment():
                 stratified=stratified,
                 datasets=Datasets(dataset_name=dataset, discretize=discretize),
                 hyperparams_dict=hyperparameters,
-                hyperparams_file=None,
+                hyperparams_file=best_results,
                 grid_paramfile=None,
                 progress_bar=False,
                 platform="BeFlask",
@@ -83,7 +84,7 @@ def experiment():
         else:
             file_name = str(Path(job.get_output_file()).name)
             try:
-                result = prepare_report(file_name)
+                result = prepare_report(file_name, form.best_results.data)
             except FileNotFoundError as e:
                 return render_template(
                     "error.html",
@@ -115,6 +116,8 @@ def experiment():
     form.n_folds.data = env.get("n_folds", 5)
     form.stratified.data = env.get("stratified", "0") == "1"
     form.discretize.data = env.get("discretize", "0") == "1"
+    form.fit_features.data = env.get("fit_features", "0") == "1"
+    form.best_results.data = current_app.config["COMPARE"]
     return render_template("experiment.html", form=form, title="Experiment")
 
 

@@ -1,6 +1,7 @@
 {% from "macros.html" import excel_button %}
 <div id="app">
     {% if back %}
+        <hr>
         <button type="button"
                 class="btn btn-primary position-relative"
                 onclick="location.href='{{ back }}'">
@@ -9,6 +10,7 @@
                 <span class="visually-hidden">Back to {{ back_name }}</span>
             </span>
         </button>
+        <hr>
     {% endif %}
     <section class="section">
         <div class="container-fluid">

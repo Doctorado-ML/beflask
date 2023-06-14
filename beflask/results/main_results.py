@@ -100,11 +100,11 @@ def set_compare():
     return AjaxResponse(True, "Ok").to_string()
 
 
-def prepare_report(file_name):
+def prepare_report(file_name, compare):
     app_config = dotenv_values(".env")
     with open(os.path.join(Folders.results, file_name)) as f:
         data = json.load(f)
-        summary = process_data(file_name, current_app.config["COMPARE"], data)
+        summary = process_data(file_name, compare, data)
     return dict(app_config=app_config, data=data, summary=summary)
 
 
@@ -115,7 +115,7 @@ def report(file_name):
     back = request.args.get("url") or ""
     back_name = request.args.get("url_name") or ""
     try:
-        result = prepare_report(file_name)
+        result = prepare_report(file_name, current_app.config["COMPARE"])
     except FileNotFoundError as e:
         return render_template(
             "error.html",
