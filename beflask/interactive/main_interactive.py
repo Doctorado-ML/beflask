@@ -1,15 +1,19 @@
 import os
+import json
 import shutil
 from pathlib import Path
 
 import dotenv
 from benchmark.Datasets import Datasets
+from benchmark.Experiments import Experiment
 from benchmark.Models import Models
 from benchmark.ResultsFiles import Benchmark
+from benchmark.Utils import Folders
 from flask import Blueprint, current_app, render_template, url_for
 from flask_login import current_user, login_required
 
 from .forms import BenchmarkDatasetForm
+from ..results.main_results import prepare_report
 
 interactive = Blueprint("interactive", __name__, template_folder="templates")
 
@@ -38,13 +42,79 @@ def experiment():
         stratified = "1" if form.stratified.data else "0"
         discretize = "1" if form.discretize.data else "0"
         ignore_nan = "1" if form.ignore_nan.data else "0"
-        hyperparameters = form.hyperparameters.data
-    else:
-        form.model.data = env.get("model")
-        form.score.data = env.get("score")
-        form.n_folds.data = env.get("n_folds", 5)
-        form.stratified.data = env.get("stratified", "0") == "1"
-        form.discretize.data = env.get("discretize", "0") == "1"
+        fit_features = "1" if form.fit_features.data else "0"
+        hyperparameters = form.hyperparameters.data or "{}"
+        back = url_for("interactive.experiment")
+        try:
+            json.loads(hyperparameters)
+        except json.JSONDecodeError as e:
+            return render_template(
+                "error.html",
+                message="Hyperparameters has to be a valid JSON",
+                error=str(e),
+                back=back,
+            )
+        try:
+            job = Experiment(
+                score_name=score,
+                model_name=model,
+                stratified=stratified,
+                datasets=Datasets(dataset_name=dataset, discretize=discretize),
+                hyperparams_dict=hyperparameters,
+                hyperparams_file=None,
+                grid_paramfile=None,
+                progress_bar=False,
+                platform="BeFlask",
+                ignore_nan=ignore_nan,
+                title="Created by the web interface",
+                folds=n_folds,
+                fit_features=fit_features,
+                discretize=discretize,
+            )
+            job.do_experiment()
+        except ValueError as e:
+            breakpoint()
+            return render_template(
+                "error.html",
+                message=f"Couldn't complete the experiment!!",
+                error=str(e),
+                back=back,
+            )
+        else:
+            file_name = str(Path(job.get_output_file()).name)
+            try:
+                result = prepare_report(file_name)
+            except FileNotFoundError as e:
+                return render_template(
+                    "error.html",
+                    message=f"This results file ({file_name}) "
+                    "has not been found!",
+                    error=str(e),
+                    back=back,
+                )
+            except ValueError as e:
+                return render_template(
+                    "error.html",
+                    message=str(e),
+                    back=url_for("results.select"),
+                )
+            os.remove(os.path.join(Folders.results, file_name))
+            return render_template(
+                "report.html",
+                data=result["data"],
+                file=file_name,
+                summary=result["summary"],
+                back=back,
+                back_name="Experiment",
+                app_config=result["app_config"],
+                excel=False,
+            )
+
+    form.model.data = env.get("model")
+    form.score.data = env.get("score")
+    form.n_folds.data = env.get("n_folds", 5)
+    form.stratified.data = env.get("stratified", "0") == "1"
+    form.discretize.data = env.get("discretize", "0") == "1"
     return render_template("experiment.html", form=form, title="Experiment")
 
 

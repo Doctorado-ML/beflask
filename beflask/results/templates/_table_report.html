@@ -50,7 +50,8 @@
                         </tr>
                     </thead>
                 </table>
-                <div>{{ excel_button([ file ]) }}</div>
+                {% set show_excel = excel| default(True) %}
+                {% if show_excel %}<div>{{ excel_button([ file ]) }}</div>{% endif %}
                 <table class="table table-striped table-hover table-bordered bg-light"
                        id="report-table"
                        data-toggle="table"

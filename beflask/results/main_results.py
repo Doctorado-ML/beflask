@@ -100,39 +100,41 @@ def set_compare():
     return AjaxResponse(True, "Ok").to_string()
 
 
+def prepare_report(file_name):
+    app_config = dotenv_values(".env")
+    with open(os.path.join(Folders.results, file_name)) as f:
+        data = json.load(f)
+        summary = process_data(file_name, current_app.config["COMPARE"], data)
+    return dict(app_config=app_config, data=data, summary=summary)
+
+
 @results.route("/report/<file_name>")
 @login_required
 def report(file_name):
     os.chdir(current_user.benchmark.folder)
     back = request.args.get("url") or ""
     back_name = request.args.get("url_name") or ""
-    app_config = dotenv_values(".env")
     try:
-        with open(os.path.join(Folders.results, file_name)) as f:
-            data = json.load(f)
-        try:
-            summary = process_data(
-                file_name, current_app.config["COMPARE"], data
-            )
-        except Exception as e:
-            return render_template(
-                "error.html", message=str(e), back=url_for("results.select")
-            )
-    except Exception as e:
+        result = prepare_report(file_name)
+    except FileNotFoundError as e:
         return render_template(
             "error.html",
             message=f"This results file ({file_name}) has not been found!",
             error=str(e),
             back=url_for("results.select"),
         )
+    except ValueError as e:
+        return render_template(
+            "error.html", message=str(e), back=url_for("results.select")
+        )
     return render_template(
         "report.html",
-        data=data,
+        data=result["data"],
         file=file_name,
-        summary=summary,
+        summary=result["summary"],
         back=back,
         back_name=back_name,
-        app_config=app_config,
+        app_config=result["app_config"],
     )
 
 
